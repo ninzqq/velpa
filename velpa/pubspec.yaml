@@ -9,6 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.2
+  firebase_core: ^2.3.0
+  cloud_firestore: ^4.1.0
+  firebase_auth: ^4.1.5
+  google_sign_in: ^5.2.4
+  json_serializable: ^6.1.4
+  json_annotation: ^4.4.0
+  crypto: ^3.0.1
+  rxdart: ^0.27.3
+  provider: ^6.0.2
+  font_awesome_flutter: ^10.1.0
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

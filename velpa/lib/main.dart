@@ -9,10 +9,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+        body: const SafeArea(
+          child: Center(
+            child: Text('Hello World!'),
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'Map',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Profile',
+            ),
+          ],
         ),
       ),
     );
