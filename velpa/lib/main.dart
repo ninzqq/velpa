@@ -1,18 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:velpa/local_models/local_models.dart';
+import 'package:velpa/local_models/models.dart';
 import 'package:velpa/screens/mapscreen.dart';
 import 'package:velpa/screens/markersscreen.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(Velpa());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Velpa extends StatelessWidget {
+  Velpa({super.key});
+
+  double? lat;
+  double? lon;
+  double? zoom;
+  LocationData? locationData;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Map App',
-      home: HomeScreen(),
-    );
+    getCurrentLocation();
+    if (lat == null || lon == null) {
+      return const Center(
+          child: Text('loading', textDirection: TextDirection.ltr));
+    } else {
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => BottomNavBarIndex(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => MapsLastCameraPosition(
+                lat: lat ?? 0.0, lon: lon ?? 0.0, zoom: zoom ?? 6.0),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => UserMarkers(),
+          ),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.blue,
+                brightness: Brightness.dark,
+              ),
+              textTheme: const TextTheme(
+                displayLarge: TextStyle(
+                  fontSize: 64,
+                  fontWeight: FontWeight.bold,
+                ),
+                labelMedium: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(239, 0, 23, 39),
+                ),
+                bodyMedium: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  color: Color.fromARGB(240, 0, 29, 29),
+                ),
+              )),
+          title: 'Velpa',
+          home: const HomeScreen(),
+        ),
+      );
+    }
+  }
+
+  Future getCurrentLocation() async {
+    Location location = Location();
+    locationData = await location.getLocation();
+    lat = locationData?.latitude ?? 0.0; // Provide a default value if null
+    lon = locationData?.longitude ?? 0.0; // Provide a default value if null
+    print(
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    print("lat: $lat, lon: $lon");
   }
 }
 
@@ -24,26 +85,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
   final List<Widget> screens = [
     const MapScreen(),
     const OtherMarkersScreen(),
     // Lisää tähän lisää sivuja tarvittaessa
   ];
 
-  void onItemTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    print('REBUILT HOMESCREENSTATE');
+    var bottomnavbarindex =
+        Provider.of<BottomNavBarIndex>(context, listen: true);
+
     return Scaffold(
-      body: screens[currentIndex],
+      body: screens[bottomnavbarindex.idx],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onItemTapped,
+        currentIndex: bottomnavbarindex.idx,
+        onTap: bottomnavbarindex.changeIndex,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.map),

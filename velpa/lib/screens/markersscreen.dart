@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:velpa/local_models/models.dart';
+import 'package:velpa/widgets/markertile.dart';
 
 class OtherMarkersScreen extends StatelessWidget {
-  final List<Marker>? markers; // Make the markers parameter nullable
-
-  const OtherMarkersScreen({super.key, this.markers});
+  const OtherMarkersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (markers == null) {
-      // Handle the case when markers are null (you can show a loading indicator or an error message)
+    var usermarkers = Provider.of<UserMarkers>(context, listen: true);
+    if (usermarkers.markers.isEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Omat laskupaikat'),
         ),
         body: const Center(
-          child: CircularProgressIndicator(), // Show a loading indicator
+          child:
+              Text('You haven\'t set any markers'), // Show a loading indicator
         ),
       );
     }
@@ -25,13 +26,9 @@ class OtherMarkersScreen extends StatelessWidget {
         title: const Text('Muiden merkitsemät paikat'),
       ),
       body: ListView.builder(
-        itemCount: markers?.length ?? 0,
+        itemCount: usermarkers.markers.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text('Paikka ${index + 1}'),
-            subtitle: Text(
-                'Lat: ${markers?[index].position.latitude}, Lng: ${markers?[index].position.longitude}'),
-          );
+          return MarkerListTile(index: index);
         },
       ),
     );
