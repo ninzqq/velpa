@@ -21,6 +21,8 @@ class _MapScreenState extends State<MapScreen> {
     var lastCameraPos =
         Provider.of<MapsLastCameraPosition>(context, listen: true);
     var usermarkers = Provider.of<UserMarkers>(context, listen: true);
+    var appflags = Provider.of<AppFlags>(context, listen: true);
+    var tempMarker = Provider.of<TemporaryMarker>(context, listen: true);
 
     return GoogleMap(
       onMapCreated: (controller) {
@@ -32,18 +34,21 @@ class _MapScreenState extends State<MapScreen> {
         target: LatLng(lastCameraPos.lat, lastCameraPos.lon),
         zoom: lastCameraPos.zoom,
       ),
-      onTap: (LatLng location) {
-        // Merkitse paikka kartalle
-        setState(() {
-          usermarkers.add(
-            Marker(
-              markerId: MarkerId(location.toString()),
-              position: location,
-              infoWindow: const InfoWindow(title: 'Merkitty paikka'),
-            ),
-          );
-        });
-      },
+      //
+      onTap: !appflags.markerSelected
+          ? (LatLng location) {
+              tempMarker.set(
+                Marker(
+                  markerId: MarkerId(location.toString()),
+                  position: location,
+                  infoWindow: const InfoWindow(title: 'Merkitty paikka'),
+                ),
+              );
+              appflags.setMarkerSelected(true);
+            }
+          : (LatLng location) {
+              appflags.setMarkerSelected(false);
+            },
       onCameraMove: ((position) => {
             lastCameraPos.setLastCameraPos(
               LatLng(position.target.latitude, position.target.longitude),

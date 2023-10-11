@@ -5,6 +5,7 @@ import 'package:velpa/local_models/models.dart';
 import 'package:velpa/screens/mapscreen.dart';
 import 'package:velpa/screens/markersscreen.dart';
 import 'package:provider/provider.dart';
+import 'package:velpa/widgets/bottomnavbar.dart';
 
 void main() => runApp(Velpa());
 
@@ -30,10 +31,16 @@ class Velpa extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => MapsLastCameraPosition(
-                lat: lat ?? 0.0, lon: lon ?? 0.0, zoom: zoom ?? 6.0),
+                lat: lat ?? 0.0, lon: lon ?? 0.0, zoom: zoom ?? 15.0),
           ),
           ChangeNotifierProvider(
             create: (context) => UserMarkers(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => AppFlags(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => TemporaryMarker(),
           ),
         ],
         child: MaterialApp(
@@ -58,6 +65,11 @@ class Velpa extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                   color: Color.fromARGB(240, 0, 29, 29),
                 ),
+                bodyLarge: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  color: Color.fromARGB(239, 200, 255, 255),
+                ),
               )),
           title: 'Velpa',
           home: const HomeScreen(),
@@ -71,9 +83,6 @@ class Velpa extends StatelessWidget {
     locationData = await location.getLocation();
     lat = locationData?.latitude ?? 0.0; // Provide a default value if null
     lon = locationData?.longitude ?? 0.0; // Provide a default value if null
-    print(
-        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    print("lat: $lat, lon: $lon");
   }
 }
 
@@ -99,20 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: screens[bottomnavbarindex.idx],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: bottomnavbarindex.idx,
-        onTap: bottomnavbarindex.changeIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Markers',
-          ),
-          // Lisää tähän lisää kohteita tarvittaessa
-        ],
+      bottomNavigationBar: BottomNavBar(
+        bottomnavbarindex: bottomnavbarindex,
       ),
     );
   }

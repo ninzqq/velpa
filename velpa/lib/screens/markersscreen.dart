@@ -12,18 +12,20 @@ class OtherMarkersScreen extends StatelessWidget {
     if (usermarkers.markers.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Omat laskupaikat'),
+          title: const Text('Markers123123'),
         ),
-        body: const Center(
-          child:
-              Text('You haven\'t set any markers'), // Show a loading indicator
+        body: Center(
+          child: Text(
+            'You haven\'t set any markers',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Muiden merkitsemät paikat'),
+        title: const Text('Markers'),
       ),
       body: ListView.builder(
         itemCount: usermarkers.markers.length,

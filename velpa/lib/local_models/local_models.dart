@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 
 class BottomNavBarIndex with ChangeNotifier {
   int idx;
@@ -10,6 +9,27 @@ class BottomNavBarIndex with ChangeNotifier {
 
   void changeIndex(int index) {
     idx = index;
+    notifyListeners();
+  }
+}
+
+class AppFlags with ChangeNotifier {
+  bool markerSelected;
+  AppFlags({
+    this.markerSelected = false,
+  });
+
+  void setMarkerSelected(bool b) {
+    markerSelected = b;
+    notifyListeners();
+  }
+}
+
+class TemporaryMarker with ChangeNotifier {
+  Marker marker = const Marker(markerId: MarkerId('123'));
+
+  void set(Marker marker) {
+    this.marker = marker;
     notifyListeners();
   }
 }
