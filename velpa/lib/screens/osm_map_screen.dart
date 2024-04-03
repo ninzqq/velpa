@@ -14,8 +14,8 @@ class _OSMMapScreenState extends State<OSMMapScreen> {
   Widget build(BuildContext context) {
     return FlutterMap(
       options: const MapOptions(
-        initialCenter: LatLng(51.509364, -0.128928),
-        initialZoom: 9.2,
+        initialCenter: LatLng(65.3, 27), // Get Finland on the screen on startup
+        initialZoom: 5.85,
       ),
       children: [
         TileLayer(
