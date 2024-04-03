@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:velpa/local_models/local_models.dart';
-import 'package:velpa/local_models/models.dart';
-import 'package:velpa/screens/mapscreen.dart';
-import 'package:velpa/screens/markersscreen.dart';
+import 'package:velpa/models/local_models.dart';
+import 'package:velpa/models/models.dart';
+import 'package:velpa/screens/map_screen.dart';
+import 'package:velpa/screens/markers_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:velpa/screens/osm_map_screen.dart';
 import 'package:velpa/widgets/bottomnavbar.dart';
 
 void main() => runApp(Velpa());
@@ -20,7 +21,7 @@ class Velpa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getCurrentLocation();
-    if (lat == null || lon == null) {
+    if (lat == 1.0 || lon == 1.0) {
       return const Center(
           child: Text('loading', textDirection: TextDirection.ltr));
     } else {
@@ -95,7 +96,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> screens = [
-    const MapScreen(),
+    const OSMMapScreen(),
     const OtherMarkersScreen(),
     // Lisää tähän lisää sivuja tarvittaessa
   ];

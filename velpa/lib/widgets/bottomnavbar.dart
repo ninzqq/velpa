@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:velpa/local_models/local_models.dart';
+import 'package:velpa/models/local_models.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({

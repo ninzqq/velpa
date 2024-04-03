@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:velpa/local_models/models.dart';
+import 'package:velpa/models/models.dart';
 import 'package:velpa/widgets/markertile.dart';
 
 class OtherMarkersScreen extends StatelessWidget {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-import 'package:velpa/local_models/local_models.dart';
-import 'package:velpa/local_models/models.dart';
+import 'package:velpa/models/local_models.dart';
+import 'package:velpa/models/models.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
