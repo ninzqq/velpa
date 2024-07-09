@@ -5,7 +5,7 @@ import 'package:velpa/models/models.dart';
 //import 'package:velpa/screens/google_map_screen.dart';
 import 'package:velpa/screens/markers_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:velpa/screens/osm_map_screen.dart';
+import 'package:velpa/screens/mobile/osm_map_screen_mobile.dart';
 import 'package:velpa/widgets/bottomnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
