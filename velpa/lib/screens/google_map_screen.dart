@@ -20,7 +20,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     var lastCameraPos =
         Provider.of<MapsLastCameraPosition>(context, listen: true);
-    var usermarkers = Provider.of<UserMarkers>(context, listen: true);
+    var usermarkers = Provider.of<MapMarkers>(context, listen: true);
     var appflags = Provider.of<AppFlags>(context, listen: true);
     var tempMarker = Provider.of<TemporaryMarker>(context, listen: true);
 

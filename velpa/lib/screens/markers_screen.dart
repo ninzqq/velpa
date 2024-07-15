@@ -8,7 +8,7 @@ class OtherMarkersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var usermarkers = Provider.of<UserMarkers>(context, listen: true);
+    var usermarkers = Provider.of<MapMarkers>(context, listen: true);
     if (usermarkers.markers.isEmpty) {
       return Scaffold(
         appBar: AppBar(

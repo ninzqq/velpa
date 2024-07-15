@@ -9,7 +9,7 @@ class MarkerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var usermarkers = Provider.of<UserMarkers>(context, listen: true);
+    var usermarkers = Provider.of<MapMarkers>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(
         left: 4,
