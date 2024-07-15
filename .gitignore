@@ -27,5 +27,6 @@ doc/api/
 .flutter-plugins-dependencies
 velpa/lib/firebase_options.dart
 velpa/android/app/google-services.json
+velpa/android/google-services.json
 velpa/ios/firebase_app_id_file.json
 velpa/ios/Runner/GoogleService-Info.plist
