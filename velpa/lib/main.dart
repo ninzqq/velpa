@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
+import 'package:velpa/routes.dart';
 //import 'package:velpa/screens/google_map_screen.dart';
 import 'package:velpa/screens/markers_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:velpa/screens/mobile/osm_map_screen_mobile.dart';
 import 'package:velpa/widgets/bottomnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:velpa/widgets/drawer.dart';
 import 'firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -59,6 +61,7 @@ class Velpa extends StatelessWidget {
                 ),
               ],
               child: MaterialApp(
+                routes: appRoutes,
                 theme: ThemeData(
                     useMaterial3: true,
                     colorScheme: ColorScheme.fromSeed(
@@ -87,7 +90,6 @@ class Velpa extends StatelessWidget {
                       ),
                     )),
                 title: 'Velpa',
-                home: const HomeScreen(),
               ),
             );
           }
@@ -188,45 +190,12 @@ class HomeScreenState extends State<HomeScreen> {
 
     if (!kIsWeb) {
       // Mobile
-      return SafeArea(
+      return const SafeArea(
         child: Scaffold(
-          //body: screens[bottomnavbarindex.idx],
-          //bottomNavigationBar: BottomNavBar(
-          //  bottomnavbarindex: bottomnavbarindex,
-          body: const Center(
+          body: Center(
             child: OSMMapScreen(),
           ),
-          drawer: Drawer(
-            // Add a ListView to the drawer. This ensures the user can scroll
-            // through the options in the drawer if there isn't enough vertical
-            // space to fit everything.
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: [
-                const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Text('Drawer Header'),
-                ),
-                ListTile(
-                  title: const Text('Item 1'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-                ListTile(
-                  title: const Text('Item 2'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-              ],
-            ),
-          ),
+          drawer: MainDrawer(),
         ),
       );
     } else {
