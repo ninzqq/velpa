@@ -11,7 +11,7 @@ class MainDrawer extends StatelessWidget {
         "icon": const Icon(Icons.map),
         "function": () => {
               Navigator.pop(context),
-              Navigator.pushNamed(context, "/"),
+              Navigator.popUntil(context, (route) => route.isFirst),
             },
         "selected": false,
       },

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:location/location.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
@@ -22,7 +23,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  setupLocator();
+
   runApp(Velpa());
+}
+
+final locator = GetIt.instance;
+
+void setupLocator() {
+  locator.registerLazySingleton(() => UserProvider());
 }
 
 class Velpa extends StatelessWidget {
@@ -44,6 +53,9 @@ class Velpa extends StatelessWidget {
             return MultiProvider(
               providers: [
                 ChangeNotifierProvider(
+                  create: (context) => UserProvider(),
+                ),
+                ChangeNotifierProvider(
                   create: (context) => BottomNavBarIndex(),
                 ),
                 ChangeNotifierProvider(
@@ -61,6 +73,7 @@ class Velpa extends StatelessWidget {
                 ),
               ],
               child: MaterialApp(
+                home: const HomeScreen(),
                 routes: appRoutes,
                 theme: ThemeData(
                     useMaterial3: true,
@@ -132,56 +145,6 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-// Rekisteröi uusi käyttäjä
-  Future<void> register(String email, String password) async {
-    try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      User user = userCredential.user!;
-      // Lisää käyttäjän tiedot Firestoreen
-      await firestore.collection('users').doc(user.uid).set({
-        'username': email.split('@')[0],
-        'email': email,
-        'isVerified': false,
-        'created_at': FieldValue.serverTimestamp(),
-      });
-
-      setState(() {
-        currentUser = userCredential.user;
-      });
-    } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
-    }
-  }
-
-  // Kirjaudu sisään
-  Future<void> login(String email, String password) async {
-    try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      setState(() {
-        currentUser = userCredential.user;
-      });
-    } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
-    }
-  }
-
-  // Kirjaudu ulos
-  Future<void> logout() async {
-    await auth.signOut();
-    setState(() {
-      currentUser = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     getCurrentLocation();
@@ -204,58 +167,6 @@ class HomeScreenState extends State<HomeScreen> {
         body: OSMMapScreen(),
       );
     }
-  }
-
-  Widget buildAuthForm() {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
-          ),
-          TextField(
-            controller: passwordController,
-            decoration: const InputDecoration(labelText: 'Password'),
-            obscureText: true,
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                onPressed: () =>
-                    login(emailController.text, passwordController.text),
-                child: const Text('Login'),
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    register(emailController.text, passwordController.text),
-                child: const Text('Register'),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget buildSignOutButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('Logged in as ${currentUser!.email}'),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: logout,
-          child: const Text('Sign Out'),
-        ),
-      ],
-    );
   }
 
   Future getCurrentLocation() async {

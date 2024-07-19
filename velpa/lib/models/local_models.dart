@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavBarIndex with ChangeNotifier {
   int idx;
@@ -14,13 +16,26 @@ class BottomNavBarIndex with ChangeNotifier {
 }
 
 class AppFlags with ChangeNotifier {
-  bool markerSelected;
-  AppFlags({
-    this.markerSelected = false,
-  });
+  bool markerSelected = false;
 
   void setMarkerSelected(bool b) {
     markerSelected = b;
+    notifyListeners();
+  }
+}
+
+class UserProvider with ChangeNotifier {
+  User? _currentUser;
+
+  User? get currentUser => _currentUser;
+
+  void setUser(User user) {
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  void clearUser() {
+    _currentUser = null;
     notifyListeners();
   }
 }
