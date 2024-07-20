@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/models.dart';
 
-class MarkerListTile extends StatelessWidget {
+class MarkerListTile extends ConsumerWidget {
   final int index;
 
   const MarkerListTile({required this.index, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var usermarkers = Provider.of<MapMarkers>(context, listen: true);
+  Widget build(BuildContext context, WidgetRef ref) {
+    var usermarkers = ref.read(mapMarkersProvider);
     return Padding(
       padding: const EdgeInsets.only(
         left: 4,

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/widgets/markertile.dart';
 
-class OtherMarkersScreen extends StatelessWidget {
+class OtherMarkersScreen extends ConsumerWidget {
   const OtherMarkersScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var usermarkers = Provider.of<MapMarkers>(context, listen: true);
+  Widget build(BuildContext context, WidgetRef ref) {
+    var usermarkers = ref.read(mapMarkersProvider);
     if (usermarkers.markers.isEmpty) {
       return Scaffold(
         appBar: AppBar(

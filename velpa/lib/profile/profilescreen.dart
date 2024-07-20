@@ -1,22 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/services/auth.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    UserProvider userProvider = GetIt.instance<UserProvider>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    var user = AuthService().user;
+    var loggedIn = ref.watch(userStateProvider).isLoggedIn;
 
-    if (userProvider.currentUser != null) {
+    if (loggedIn) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: ThemeData().scaffoldBackgroundColor,
-          title: Text(userProvider.currentUser!.displayName ?? 'Guest'),
+          title: Text(user!.displayName ?? 'Guest'),
         ),
         body: SafeArea(
           child: Container(
@@ -37,13 +35,13 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(userProvider.currentUser!.email ?? '',
+                  Text(user.email ?? '',
                       style: Theme.of(context).textTheme.titleLarge),
                   const Spacer(),
                   ElevatedButton(
                     child: const Text('logout'),
                     onPressed: () async {
-                      await AuthService().signOut();
+                      await AuthService().signOut(ref);
                       Navigator.pushNamedAndRemoveUntil(
                           context, '/', (Route<dynamic> route) => false);
                     },
@@ -56,11 +54,11 @@ class ProfileScreen extends StatelessWidget {
         ),
       );
     } else {
-      return buildAuthForm();
+      return buildAuthForm(ref);
     }
   }
 
-  Widget buildAuthForm() {
+  Widget buildAuthForm(WidgetRef ref) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return Scaffold(
@@ -85,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () => AuthService().emailLogin(
-                        emailController.text, passwordController.text),
+                        ref, emailController.text, passwordController.text),
                     child: const Text('Login'),
                   ),
                   ElevatedButton(
@@ -102,14 +100,14 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget buildSignOutButton() {
+  Widget buildSignOutButton(WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Logged in as ${AuthService().user!.email}'),
         const SizedBox(height: 20),
         ElevatedButton(
-          onPressed: AuthService().logout,
+          onPressed: () => AuthService().signOut(ref),
           child: const Text('Sign Out'),
         ),
       ],

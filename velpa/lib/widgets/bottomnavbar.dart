@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/local_models.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({
     super.key,
     required this.bottomnavbarindex,
@@ -11,8 +11,8 @@ class BottomNavBar extends StatelessWidget {
   final BottomNavBarIndex bottomnavbarindex;
 
   @override
-  Widget build(BuildContext context) {
-    var appflags = Provider.of<AppFlags>(context, listen: true);
+  Widget build(BuildContext context, WidgetRef ref) {
+    var appflags = ref.watch(appFlagsProvider);
     // Default navbar for navigating to different screens
     if (!appflags.markerSelected) {
       return BottomNavigationBar(

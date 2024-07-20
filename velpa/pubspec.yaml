@@ -18,7 +18,6 @@ dependencies:
   json_annotation: ^4.4.0
   crypto: ^3.0.1
   rxdart: ^0.27.3
-  provider: ^6.0.2
   font_awesome_flutter: ^10.1.0
   uuid: ^4.3.3
   google_maps_flutter: ^2.4.0
@@ -26,8 +25,7 @@ dependencies:
   flutter_map: ^7.0.0
   latlong2: ^0.9.0
   flutter_map_location_marker: ^9.0.0
-  get_it: ^7.7.0
-  shared_preferences: ^2.2.3
+  flutter_riverpod: ^2.5.1
 
 dev_dependencies:
   flutter_test:

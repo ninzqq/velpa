@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavBarIndex with ChangeNotifier {
   int idx;
@@ -15,7 +14,7 @@ class BottomNavBarIndex with ChangeNotifier {
   }
 }
 
-class AppFlags with ChangeNotifier {
+class AppFlags extends ChangeNotifier {
   bool markerSelected = false;
 
   void setMarkerSelected(bool b) {
@@ -24,21 +23,27 @@ class AppFlags with ChangeNotifier {
   }
 }
 
-class UserProvider with ChangeNotifier {
-  User? _currentUser;
+final appFlagsProvider = ChangeNotifierProvider<AppFlags>((ref) {
+  return AppFlags();
+});
 
-  User? get currentUser => _currentUser;
+class UserState extends ChangeNotifier {
+  bool isLoggedIn = false;
 
-  void setUser(User user) {
-    _currentUser = user;
+  void login() {
+    isLoggedIn = true;
     notifyListeners();
   }
 
-  void clearUser() {
-    _currentUser = null;
+  void logout() {
+    isLoggedIn = false;
     notifyListeners();
   }
 }
+
+final userStateProvider = ChangeNotifierProvider<UserState>((ref) {
+  return UserState();
+});
 
 class TemporaryMarker with ChangeNotifier {
   Marker marker = const Marker(markerId: MarkerId('123'));

@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 import 'package:velpa/models/local_models.dart';
 
 class AuthService {
   final user = FirebaseAuth.instance.currentUser;
   final firestore = FirebaseFirestore.instance;
-  UserProvider userProvider = GetIt.instance<UserProvider>();
 
   Future<void> anonLogin() async {
     try {
@@ -19,7 +16,7 @@ class AuthService {
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(WidgetRef ref) async {
     final googleCurrentUser =
         GoogleSignIn().currentUser ?? await GoogleSignIn().signIn();
     if (googleCurrentUser != null) {
@@ -28,6 +25,7 @@ class AuthService {
       });
     }
     await FirebaseAuth.instance.signOut();
+    ref.read(userStateProvider).logout();
   }
 
   Future<void> googleLogin() async {
@@ -72,22 +70,17 @@ class AuthService {
   }
 
   // Kirjaudu sisään
-  Future<void> emailLogin(String email, String password) async {
+  Future<void> emailLogin(WidgetRef ref, String email, String password) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      ref.read(userStateProvider).login();
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
     }
-    userProvider.setUser(FirebaseAuth.instance.currentUser!);
-  }
-
-  // Kirjaudu ulos
-  Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
   }
 }
