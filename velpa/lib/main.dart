@@ -44,6 +44,7 @@ class Velpa extends StatelessWidget {
             return MaterialApp(
               home: const HomeScreen(),
               routes: appRoutes,
+              title: 'Velpa',
               theme: ThemeData(
                   useMaterial3: true,
                   colorScheme: ColorScheme.fromSeed(
@@ -71,7 +72,6 @@ class Velpa extends StatelessWidget {
                       color: Color.fromARGB(239, 200, 255, 255),
                     ),
                   )),
-              title: 'Velpa',
             );
           }
 
@@ -121,12 +121,15 @@ class HomeScreenState extends State<HomeScreen> {
 
     if (!kIsWeb) {
       // Mobile
-      return const SafeArea(
+      return SafeArea(
         child: Scaffold(
-          body: Center(
+          appBar: AppBar(
+            title: const Text('Velpa'),
+          ),
+          body: const Center(
             child: OSMMapScreen(),
           ),
-          drawer: MainDrawer(),
+          drawer: const MainDrawer(),
         ),
       );
     } else {
