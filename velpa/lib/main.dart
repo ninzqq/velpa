@@ -45,11 +45,12 @@ class Velpa extends StatelessWidget {
               home: const HomeScreen(),
               routes: appRoutes,
               title: 'Velpa',
+              darkTheme: ThemeData(useMaterial3: true),
               theme: ThemeData(
                   useMaterial3: true,
-                  colorScheme: ColorScheme.fromSeed(
-                    seedColor: Colors.blue,
-                    brightness: Brightness.dark,
+                  colorScheme: const ColorScheme.dark(
+                    background: Colors.blueGrey,
+                    primary: Colors.yellow,
                   ),
                   textTheme: const TextTheme(
                     displayLarge: TextStyle(
