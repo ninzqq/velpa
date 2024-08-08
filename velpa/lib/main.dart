@@ -6,6 +6,8 @@ import 'package:velpa/routes.dart';
 import 'package:velpa/screens/markers_screen.dart';
 import 'package:velpa/screens/mobile/osm_map_screen_mobile.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:velpa/screens/mobile/osm_map_screen_mobile.dart';
+import 'package:velpa/screens/web/osm_map_screen_web.dart';
 import 'package:velpa/widgets/drawer.dart';
 import 'firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -122,17 +124,7 @@ class HomeScreenState extends State<HomeScreen> {
 
     if (!kIsWeb) {
       // Mobile
-      return SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Velpa'),
-          ),
-          body: const Center(
-            child: OSMMapScreen(),
-          ),
-          drawer: const MainDrawer(),
-        ),
-      );
+      return const OSMMapScreenMobile();
     } else {
       // Web/browser
       return const Scaffold(
