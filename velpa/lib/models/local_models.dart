@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 class BottomNavBarIndex with ChangeNotifier {
   int idx;
@@ -45,24 +45,10 @@ final userStateProvider = ChangeNotifierProvider<UserState>((ref) {
   return UserState();
 });
 
-class TemporaryMarker with ChangeNotifier {
-  Marker marker = const Marker(markerId: MarkerId('123'));
-
-  void set(Marker marker) {
-    this.marker = marker;
-    notifyListeners();
-  }
-}
-
-class MapsLastCameraPosition with ChangeNotifier {
-  double lat;
-  double lon;
-  double zoom;
-  MapsLastCameraPosition({
-    required this.lat,
-    required this.lon,
-    required this.zoom,
-  });
+class MapsLastCameraPositionState extends ChangeNotifier {
+  double lat = 65.3;
+  double lon = 27;
+  double zoom = 5;
 
   LatLng get lastCameraPos {
     return LatLng(lat, lon);
@@ -71,8 +57,13 @@ class MapsLastCameraPosition with ChangeNotifier {
   void setLastCameraPos(LatLng latlng, double zoom) {
     lat = latlng.latitude;
     lon = latlng.longitude;
-    this.zoom = zoom;
+    zoom = zoom;
     //print('$lat\n$lon\n$zoom');
     notifyListeners();
   }
 }
+
+final lastCameraPositionProvider =
+    ChangeNotifierProvider<MapsLastCameraPositionState>((ref) {
+  return MapsLastCameraPositionState();
+});
