@@ -51,8 +51,7 @@ class Velpa extends StatelessWidget {
               theme: ThemeData(
                   useMaterial3: true,
                   colorScheme: const ColorScheme.dark(
-                    background: Colors.blueGrey,
-                    primary: Colors.yellow,
+                    primary: Colors.lightBlue,
                   ),
                   textTheme: const TextTheme(
                     displayLarge: TextStyle(

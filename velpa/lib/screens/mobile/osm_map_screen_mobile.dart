@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/widgets/drawer.dart';
+import 'package:velpa/widgets/map_screen_drawer_button.dart';
 
 class OSMMapScreenMobile extends ConsumerWidget {
   const OSMMapScreenMobile({super.key});
@@ -18,10 +19,9 @@ class OSMMapScreenMobile extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Velpa'),
-        ),
         drawer: const MainDrawer(),
+        floatingActionButton: const MapScreenDrawerButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         body: FlutterMap(
           mapController: mapController,
           options: MapOptions(

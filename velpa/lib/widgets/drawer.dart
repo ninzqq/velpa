@@ -36,7 +36,7 @@ class MainDrawer extends StatelessWidget {
     ];
 
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       child: SafeArea(
         child: Column(
           children: [
