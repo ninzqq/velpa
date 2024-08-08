@@ -16,6 +16,15 @@ class MainDrawer extends StatelessWidget {
         "selected": false,
       },
       {
+        "title": const Text('Karttamerkit'),
+        'icon': const Icon(Icons.location_on),
+        'function': () => {
+              Navigator.pop(context),
+              Navigator.pushNamed(context, '/markers'),
+            },
+        'selected': false,
+      },
+      {
         "title": const Text('Profiili'),
         'icon': const Icon(Icons.label_outlined),
         'function': () => {

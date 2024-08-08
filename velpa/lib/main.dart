@@ -98,7 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> screens = [
     const OSMMapScreen(),
-    const OtherMarkersScreen(),
+    const MarkersScreen(),
   ];
   double? lat;
   double? lon;

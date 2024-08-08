@@ -41,6 +41,18 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 markerSize: Size(13, 13),
               ),
             ),
+            const MarkerLayer(markers: [
+              Marker(
+                width: 150.0,
+                height: 150.0,
+                point: LatLng(65, 27),
+                child: Icon(
+                  Icons.location_on,
+                  color: Colors.blue,
+                  size: 35.0,
+                ),
+              ),
+            ]),
           ],
         ),
       ),
