@@ -8,7 +8,10 @@ class MainDrawer extends StatelessWidget {
     final List<Map<String, dynamic>> menuItem = [
       {
         "title": const Text("Kartta"),
-        "icon": const Icon(Icons.map),
+        "icon": const Icon(
+          Icons.map,
+          color: Colors.green,
+        ),
         "function": () => {
               Navigator.pop(context),
               Navigator.popUntil(context, (route) => route.isFirst),
@@ -17,7 +20,10 @@ class MainDrawer extends StatelessWidget {
       },
       {
         "title": const Text('Karttamerkit'),
-        'icon': const Icon(Icons.location_on),
+        'icon': const Icon(
+          Icons.location_on,
+          color: Colors.lightBlue,
+        ),
         'function': () => {
               Navigator.pop(context),
               Navigator.pushNamed(context, '/markers'),
@@ -26,7 +32,10 @@ class MainDrawer extends StatelessWidget {
       },
       {
         "title": const Text('Profiili'),
-        'icon': const Icon(Icons.label_outlined),
+        'icon': const Icon(
+          Icons.label_outlined,
+          color: Colors.deepPurple,
+        ),
         'function': () => {
               Navigator.pop(context),
               Navigator.pushNamed(context, '/profile'),
@@ -35,7 +44,7 @@ class MainDrawer extends StatelessWidget {
       },
       {
         "title": const Text("Asetukset"),
-        "icon": const Icon(Icons.settings),
+        "icon": const Icon(Icons.settings, color: Colors.blueGrey),
         "function": () => {
               Navigator.pop(context),
               Navigator.pushNamed(context, "/settings"),
