@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/services/auth.dart';
+import 'package:velpa/widgets/drawer.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -62,6 +63,10 @@ class ProfileScreen extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Log in or register'),
+      ),
+      //drawer: const MainDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
