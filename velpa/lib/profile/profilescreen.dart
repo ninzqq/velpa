@@ -43,8 +43,10 @@ class ProfileScreen extends ConsumerWidget {
                     child: const Text('logout'),
                     onPressed: () async {
                       await AuthService().signOut(ref);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/', (Route<dynamic> route) => false);
+                      if (context.mounted) {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/', (Route<dynamic> route) => false);
+                      }
                     },
                   ),
                   const Spacer(),
@@ -93,7 +95,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   ElevatedButton(
                     onPressed: () => AuthService().emailRegister(
-                        emailController.text, passwordController.text),
+                        ref, emailController.text, passwordController.text),
                     child: const Text('Register'),
                   ),
                 ],

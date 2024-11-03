@@ -28,15 +28,19 @@ final appFlagsProvider = ChangeNotifierProvider<AppFlags>((ref) {
 });
 
 class UserState extends ChangeNotifier {
-  bool isLoggedIn = false;
+  bool _isLoggedIn = false;
+
+  get isLoggedIn {
+    return _isLoggedIn;
+  }
 
   void login() {
-    isLoggedIn = true;
+    _isLoggedIn = true;
     notifyListeners();
   }
 
   void logout() {
-    isLoggedIn = false;
+    _isLoggedIn = false;
     notifyListeners();
   }
 }

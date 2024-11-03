@@ -23,7 +23,7 @@ class MarkerListTile extends ConsumerWidget {
           style: Theme.of(context).textTheme.labelMedium,
         ),
         subtitle: Text(
-          'Lat: ${usermarkers.markers[index].position.latitude},\nLng: ${usermarkers.markers[index].position.longitude}',
+          'Lat: ${usermarkers.markers[index].point.latitude},\nLng: ${usermarkers.markers[index].point.longitude}',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         tileColor: Theme.of(context).colorScheme.primary,

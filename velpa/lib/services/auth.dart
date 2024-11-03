@@ -47,7 +47,9 @@ class AuthService {
   }
 
   // Rekisteröi uusi käyttäjä
-  Future<void> emailRegister(String email, String password) async {
+  Future<void> emailRegister(
+      WidgetRef ref, String email, String password) async {
+    bool registeredSuccessfully = false;
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -63,9 +65,13 @@ class AuthService {
         'isVerified': false,
         'created_at': FieldValue.serverTimestamp(),
       });
+      registeredSuccessfully = true;
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
+    }
+    if (registeredSuccessfully) {
+      emailLogin(ref, email, password);
     }
   }
 

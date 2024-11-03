@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
@@ -77,10 +77,10 @@ class MapMarker {
 class MapMarkers with ChangeNotifier {
   List<Marker> markers = [];
 
-  void add(Marker marker) {
+  void addNewMarker(Marker marker) {
     markers.add(marker);
     print(
-        'Add position lat: ${marker.position.latitude}, lon: ${marker.position.longitude}.');
+        'Add position lat: ${marker.point.latitude} lon: ${marker.point.longitude}');
     notifyListeners();
     printMarkers();
   }

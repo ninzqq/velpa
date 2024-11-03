@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:velpa/models/local_models.dart';
+import 'package:velpa/models/models.dart';
 import 'package:velpa/widgets/drawer.dart';
 import 'package:velpa/widgets/map_screen_drawer_button.dart';
 
@@ -16,6 +17,8 @@ class OSMMapScreenMobile extends ConsumerWidget {
     MapController mapController = MapController();
     LatLng currentCenter = ref.watch(lastCameraPositionProvider).lastCameraPos;
     double currentZoom = ref.watch(lastCameraPositionProvider).zoom;
+    List<Marker> markers = ref.watch(mapMarkersProvider).markers;
+    var addMarker = ref.read(mapMarkersProvider).addNewMarker;
 
     return SafeArea(
       child: Scaffold(
@@ -28,11 +31,19 @@ class OSMMapScreenMobile extends ConsumerWidget {
             initialCenter:
                 currentCenter, // Get Finland on the screen on startup
             initialZoom: currentZoom,
+            onTap: (tapPosition, point) => addMarker(
+              Marker(
+                point: point,
+                child: const Icon(
+                  Icons.location_on,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
           ),
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.app',
             ),
             CurrentLocationLayer(
               alignPositionOnUpdate: AlignOnUpdate.never,
@@ -41,18 +52,7 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 markerSize: Size(13, 13),
               ),
             ),
-            const MarkerLayer(markers: [
-              Marker(
-                width: 150.0,
-                height: 150.0,
-                point: LatLng(65, 27),
-                child: Icon(
-                  Icons.location_on,
-                  color: Colors.blue,
-                  size: 35.0,
-                ),
-              ),
-            ]),
+            MarkerLayer(markers: markers),
           ],
         ),
       ),
