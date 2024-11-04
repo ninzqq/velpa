@@ -3,7 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
@@ -19,7 +18,6 @@ class OSMMapScreenMobile extends ConsumerWidget {
     LatLng currentCenter = ref.watch(lastCameraPositionProvider).lastCameraPos;
     double currentZoom = ref.watch(lastCameraPositionProvider).zoom;
     List<Marker> markers = ref.watch(mapMarkersProvider).markers;
-    var addMarker = ref.read(mapMarkersProvider).addNewMarker;
 
     return SafeArea(
       child: Scaffold(
@@ -32,17 +30,6 @@ class OSMMapScreenMobile extends ConsumerWidget {
             initialCenter:
                 currentCenter, // Get Finland on the screen on startup
             initialZoom: currentZoom,
-            //onLongPress: (tapPosition, point) => addMarker(
-            //  Marker(
-            //    point: point,
-            //    child: const Icon(
-            //      Icons.location_on,
-            //      color: Colors.blue,
-            //    ),
-            //    alignment: Alignment.topCenter,
-            //    height: 22,
-            //  ),
-            //),
             onLongPress: (tapPosition, point) {
               showModalBottomSheet(
                 context: context,
