@@ -15,9 +15,9 @@ class OSMMapScreenMobile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     MapController mapController = MapController();
-    LatLng currentCenter = ref.watch(lastCameraPositionProvider).lastCameraPos;
-    double currentZoom = ref.watch(lastCameraPositionProvider).zoom;
-    List<Marker> markers = ref.watch(mapMarkersProvider).markers;
+    LatLng currentCenter = ref.read(lastCameraPositionProvider).lastCameraPos;
+    double currentZoom = ref.read(lastCameraPositionProvider).zoom;
+    List<Marker> markers = ref.read(mapMarkersProvider).markers;
 
     return SafeArea(
       child: Scaffold(
@@ -25,12 +25,27 @@ class OSMMapScreenMobile extends ConsumerWidget {
         floatingActionButton: const MapScreenDrawerButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         body: FlutterMap(
-          mapController: mapController,
+          //mapController: mapController, // if uncommented, this will cause the map freeze
           options: MapOptions(
             initialCenter:
-                currentCenter, // Get Finland on the screen on startup
-            initialZoom: currentZoom,
+                const LatLng(65.3, 27), // Get Finland on the screen on startup
+            initialZoom: 5,
             onLongPress: (tapPosition, point) {
+              ref.read(mapMarkersProvider).addNewMarker(
+                    Marker(
+                      height: 22.0,
+                      point: point,
+                      alignment: Alignment.topCenter,
+                      child: GestureDetector(
+                        child: const Icon(
+                          Icons.location_on,
+                          color: Colors.blue,
+                        ),
+                        onTap: () => print('Marker tapped!'),
+                      ),
+                    ),
+                    ref,
+                  );
               showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {

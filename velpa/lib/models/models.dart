@@ -78,9 +78,8 @@ class MapMarker {
 class MapMarkers extends ChangeNotifier {
   List<Marker> markers = [];
 
-  void addNewMarker(Marker marker) {
-    final container = ProviderContainer();
-    final appFlags = container.read(appFlagsProvider);
+  void addNewMarker(Marker marker, WidgetRef ref) {
+    final appFlags = ref.read(appFlagsProvider);
 
     markers.add(marker);
 
@@ -90,8 +89,12 @@ class MapMarkers extends ChangeNotifier {
       //printMarkers();
     }
 
-    //notifyListeners();
-    container.dispose();
+    notifyListeners();
+  }
+
+  void removeLastMarker() {
+    markers.removeLast();
+    notifyListeners();
   }
 
   void printMarkers() {
@@ -102,3 +105,25 @@ class MapMarkers extends ChangeNotifier {
 final mapMarkersProvider = ChangeNotifierProvider<MapMarkers>((ref) {
   return MapMarkers();
 });
+
+class TemporaryMapMarker extends ChangeNotifier {
+  Marker? marker;
+
+  void setTemporaryMarker(Marker marker) {
+    this.marker = marker;
+    print(
+        'Add temporary marker at lat: ${marker.point.latitude} lon: ${marker.point.longitude}');
+    notifyListeners();
+  }
+
+  void removeTemporaryMarker() {
+    marker = null;
+    notifyListeners();
+  }
+}
+
+final temporaryMapMarkerProvider = ChangeNotifierProvider<TemporaryMapMarker>(
+  (ref) {
+    return TemporaryMapMarker();
+  },
+);

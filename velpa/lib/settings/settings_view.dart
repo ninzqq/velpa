@@ -61,7 +61,7 @@ class SettingsView extends ConsumerWidget {
                   value: ThemeMode.light,
                   child: Text(
                     'Light Theme',
-                    style: TextStyle(color: theme.colorScheme.primaryFixed),
+                    style: theme.textTheme.labelMedium,
                   ),
                 ),
               ],

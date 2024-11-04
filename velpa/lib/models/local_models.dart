@@ -77,7 +77,7 @@ class MapsLastCameraPositionState extends ChangeNotifier {
     lat = latlng.latitude;
     lon = latlng.longitude;
     zoom = zoom;
-    //print('$lat\n$lon\n$zoom');
+    print('$lat\n$lon\n$zoom');
     notifyListeners();
   }
 }

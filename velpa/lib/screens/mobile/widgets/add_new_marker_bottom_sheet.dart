@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velpa/models/models.dart';
 
 class AddNewMarkerBottomSheet extends ConsumerWidget {
   final LatLng point;
@@ -19,14 +21,37 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Add New Marker',
-                  style: theme.textTheme.labelMedium,
+                Column(
+                  children: [
+                    Text(
+                      'Add New Marker',
+                      style: theme.textTheme.labelMedium,
+                    ),
+                    Text(
+                      'data: Latitude: ${point.latitude}, Longitude: ${point.longitude}',
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
-                Text(
-                  'data: Latitude: ${point.latitude}, Longitude: ${point.longitude}',
-                  style: theme.textTheme.bodyMedium,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Add Marker'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        ref.read(mapMarkersProvider).removeLastMarker();
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                  ],
                 ),
               ],
             ),
