@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:velpa/models/local_models.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
   double lat;
@@ -74,15 +75,23 @@ class MapMarker {
   }
 }
 
-class MapMarkers with ChangeNotifier {
+class MapMarkers extends ChangeNotifier {
   List<Marker> markers = [];
 
   void addNewMarker(Marker marker) {
+    final container = ProviderContainer();
+    final appFlags = container.read(appFlagsProvider);
+
     markers.add(marker);
-    print(
-        'Add position lat: ${marker.point.latitude} lon: ${marker.point.longitude}');
-    notifyListeners();
-    printMarkers();
+
+    if (appFlags.debug) {
+      print(
+          'Add position lat: ${marker.point.latitude} lon: ${marker.point.longitude}');
+      //printMarkers();
+    }
+
+    //notifyListeners();
+    container.dispose();
   }
 
   void printMarkers() {

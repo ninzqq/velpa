@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/services/auth.dart';
-import 'package:velpa/widgets/drawer.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

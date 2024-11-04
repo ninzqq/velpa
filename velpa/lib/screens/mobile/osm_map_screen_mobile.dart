@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
+import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/widgets/drawer.dart';
 import 'package:velpa/widgets/map_screen_drawer_button.dart';
 
@@ -31,25 +32,38 @@ class OSMMapScreenMobile extends ConsumerWidget {
             initialCenter:
                 currentCenter, // Get Finland on the screen on startup
             initialZoom: currentZoom,
-            onTap: (tapPosition, point) => addMarker(
-              Marker(
-                point: point,
-                child: const Icon(
-                  Icons.location_on,
-                  color: Colors.blue,
-                ),
-              ),
-            ),
+            //onLongPress: (tapPosition, point) => addMarker(
+            //  Marker(
+            //    point: point,
+            //    child: const Icon(
+            //      Icons.location_on,
+            //      color: Colors.blue,
+            //    ),
+            //    alignment: Alignment.topCenter,
+            //    height: 22,
+            //  ),
+            //),
+            onLongPress: (tapPosition, point) {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddNewMarkerBottomSheet(
+                    point: point,
+                  );
+                },
+              );
+            },
           ),
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.velpa',
             ),
             CurrentLocationLayer(
               alignPositionOnUpdate: AlignOnUpdate.never,
               alignDirectionOnUpdate: AlignOnUpdate.always,
               style: const LocationMarkerStyle(
-                markerSize: Size(13, 13),
+                markerSize: Size(1, 1),
               ),
             ),
             MarkerLayer(markers: markers),

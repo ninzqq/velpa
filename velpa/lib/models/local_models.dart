@@ -15,10 +15,25 @@ class BottomNavBarIndex with ChangeNotifier {
 }
 
 class AppFlags extends ChangeNotifier {
-  bool markerSelected = false;
+  bool _markerSelected = false;
+  bool _debug = true;
+
+  get markerSelected {
+    return _markerSelected;
+  }
+
+  get debug {
+    return _debug;
+  }
 
   void setMarkerSelected(bool b) {
-    markerSelected = b;
+    _markerSelected = b;
+    notifyListeners();
+  }
+
+  void setDebug(bool b) {
+    _debug = b;
+    print('Debug mode: $_debug');
     notifyListeners();
   }
 }
