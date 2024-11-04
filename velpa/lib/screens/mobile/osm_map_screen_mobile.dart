@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:uuid/uuid.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
@@ -17,7 +18,9 @@ class OSMMapScreenMobile extends ConsumerWidget {
     MapController mapController = MapController();
     LatLng currentCenter = ref.read(lastCameraPositionProvider).lastCameraPos;
     double currentZoom = ref.read(lastCameraPositionProvider).zoom;
-    List<Marker> markers = ref.read(mapMarkersProvider).markers;
+    List<Marker> markers = ref.watch(mapMarkersProvider).markers;
+    List<Marker> temporaryMarkers =
+        ref.watch(mapMarkersProvider).temporaryMarkers;
 
     return SafeArea(
       child: Scaffold(
@@ -31,8 +34,9 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 const LatLng(65.3, 27), // Get Finland on the screen on startup
             initialZoom: 5,
             onLongPress: (tapPosition, point) {
-              ref.read(mapMarkersProvider).addNewMarker(
+              ref.read(mapMarkersProvider).addTemporaryMarker(
                     Marker(
+                      key: ValueKey(const Uuid().v1()),
                       height: 22.0,
                       point: point,
                       alignment: Alignment.topCenter,
@@ -41,7 +45,8 @@ class OSMMapScreenMobile extends ConsumerWidget {
                           Icons.location_on,
                           color: Colors.blue,
                         ),
-                        onTap: () => print('Marker tapped!'),
+                        onTap: () => print(
+                            'Marker $key tapped! Point: ${point.toString()}'),
                       ),
                     ),
                     ref,
@@ -53,6 +58,8 @@ class OSMMapScreenMobile extends ConsumerWidget {
                     point: point,
                   );
                 },
+              ).whenComplete(
+                () => ref.read(mapMarkersProvider).clearTemporaryMarkers(ref),
               );
             },
           ),
@@ -68,7 +75,7 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 markerSize: Size(1, 1),
               ),
             ),
-            MarkerLayer(markers: markers),
+            MarkerLayer(markers: [...markers, ...temporaryMarkers]),
           ],
         ),
       ),

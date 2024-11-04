@@ -40,13 +40,13 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        ref.read(mapMarkersProvider).addMarker(ref);
                         Navigator.pop(context);
                       },
                       child: const Text('Add Marker'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        ref.read(mapMarkersProvider).removeLastMarker();
                         Navigator.pop(context);
                       },
                       child: const Text('Cancel'),

@@ -77,16 +77,18 @@ class MapMarker {
 
 class MapMarkers extends ChangeNotifier {
   List<Marker> markers = [];
+  List<Marker> temporaryMarkers = [];
 
-  void addNewMarker(Marker marker, WidgetRef ref) {
+  void addMarker(WidgetRef ref) {
     final appFlags = ref.read(appFlagsProvider);
+
+    Marker marker = temporaryMarkers.last;
 
     markers.add(marker);
 
     if (appFlags.debug) {
       print(
-          'Add position lat: ${marker.point.latitude} lon: ${marker.point.longitude}');
-      //printMarkers();
+          'Add marker at lat: ${marker.point.latitude} lon: ${marker.point.longitude}, key: ${marker.key}');
     }
 
     notifyListeners();
@@ -94,6 +96,29 @@ class MapMarkers extends ChangeNotifier {
 
   void removeLastMarker() {
     markers.removeLast();
+    notifyListeners();
+  }
+
+  void addTemporaryMarker(Marker marker, WidgetRef ref) {
+    final appFlags = ref.read(appFlagsProvider);
+
+    temporaryMarkers.add(marker);
+
+    if (appFlags.debug) {
+      print(
+          'Add temporary marker at lat: ${marker.point.latitude} lon: ${marker.point.longitude}, key: ${marker.key}');
+    }
+
+    notifyListeners();
+  }
+
+  void clearTemporaryMarkers(WidgetRef ref) {
+    final appFlags = ref.read(appFlagsProvider);
+    temporaryMarkers.clear();
+
+    if (appFlags.debug) {
+      print('Temporary markers cleared');
+    }
     notifyListeners();
   }
 
