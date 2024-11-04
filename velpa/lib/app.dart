@@ -76,13 +76,14 @@ class Velpa extends StatelessWidget {
                     ),
                     darkTheme: ThemeData(
                       textTheme: const TextTheme(
-                        bodyMedium: TextStyle(color: Colors.white54),
+                        bodyMedium:
+                            TextStyle(color: Colors.white70, fontSize: 16),
                         labelMedium:
-                            TextStyle(color: Colors.white60, fontSize: 16),
+                            TextStyle(color: Colors.white70, fontSize: 18),
                         displayLarge:
-                            TextStyle(color: Colors.white60, fontSize: 44),
+                            TextStyle(color: Colors.white70, fontSize: 44),
                         displayMedium:
-                            TextStyle(color: Colors.white60, fontSize: 32),
+                            TextStyle(color: Colors.white70, fontSize: 32),
                       ),
                       colorScheme: ColorScheme.fromSwatch().copyWith(
                         primary: const Color.fromARGB(255, 20, 25, 46),

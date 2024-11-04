@@ -8,25 +8,26 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var theme = Theme.of(context);
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.4,
       child: BottomSheet(
+        enableDrag: false,
+        backgroundColor: theme.colorScheme.primary,
         onClosing: () {},
         builder: (context) {
-          return Container(
+          return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Add New Marker',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: theme.textTheme.labelMedium,
                 ),
                 Text(
-                    'data: Latitude: ${point.latitude}, Longitude: ${point.longitude}'),
+                  'data: Latitude: ${point.latitude}, Longitude: ${point.longitude}',
+                  style: theme.textTheme.bodyMedium,
+                ),
               ],
             ),
           );
