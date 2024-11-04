@@ -5,9 +5,10 @@ class MainDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     final List<Map<String, dynamic>> menuItem = [
       {
-        "title": const Text("Kartta"),
+        "title": Text("Kartta", style: theme.textTheme.bodyMedium),
         "icon": const Icon(
           Icons.map,
           color: Colors.green,
@@ -19,7 +20,7 @@ class MainDrawer extends StatelessWidget {
         "selected": false,
       },
       {
-        "title": const Text('Karttamerkit'),
+        "title": Text('Karttamerkit', style: theme.textTheme.bodyMedium),
         'icon': const Icon(
           Icons.location_on,
           color: Colors.lightBlue,
@@ -31,7 +32,7 @@ class MainDrawer extends StatelessWidget {
         'selected': false,
       },
       {
-        "title": const Text('Profiili'),
+        "title": Text('Profiili', style: theme.textTheme.bodyMedium),
         'icon': const Icon(
           Icons.label_outlined,
           color: Colors.deepPurple,
@@ -43,7 +44,7 @@ class MainDrawer extends StatelessWidget {
         'selected': false,
       },
       {
-        "title": const Text("Asetukset"),
+        "title": Text("Asetukset", style: theme.textTheme.bodyMedium),
         "icon": const Icon(Icons.settings, color: Colors.blueGrey),
         "function": () => {
               Navigator.pop(context),
@@ -64,7 +65,7 @@ class MainDrawer extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Text(
                   'Mulla harrastus on...',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: theme.textTheme.labelLarge,
                 ),
               ),
             ),

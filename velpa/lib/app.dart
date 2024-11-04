@@ -80,6 +80,8 @@ class Velpa extends StatelessWidget {
                             TextStyle(color: Colors.white70, fontSize: 16),
                         labelMedium:
                             TextStyle(color: Colors.white70, fontSize: 18),
+                        labelLarge:
+                            TextStyle(color: Colors.white70, fontSize: 24),
                         displayLarge:
                             TextStyle(color: Colors.white70, fontSize: 44),
                         displayMedium:
