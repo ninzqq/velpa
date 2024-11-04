@@ -6,6 +6,8 @@ import 'package:velpa/services/auth.dart';
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
+  static const routeName = '/profile';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var user = AuthService().user;

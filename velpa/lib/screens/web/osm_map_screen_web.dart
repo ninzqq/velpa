@@ -4,14 +4,14 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
-class OSMMapScreen extends StatefulWidget {
-  const OSMMapScreen({super.key});
+class OSMMapScreenWeb extends StatefulWidget {
+  const OSMMapScreenWeb({super.key});
 
   @override
-  State<OSMMapScreen> createState() => _OSMMapScreenState();
+  State<OSMMapScreenWeb> createState() => _OSMMapScreenState();
 }
 
-class _OSMMapScreenState extends State<OSMMapScreen> {
+class _OSMMapScreenState extends State<OSMMapScreenWeb> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(

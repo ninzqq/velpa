@@ -6,6 +6,8 @@ import 'package:velpa/widgets/marker_list_tile.dart';
 class MarkersScreen extends ConsumerWidget {
   const MarkersScreen({super.key});
 
+  static const routeName = '/markers';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var usermarkers = ref.read(mapMarkersProvider);
