@@ -3,8 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:uuid/uuid.dart';
-import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/widgets/drawer.dart';
@@ -15,9 +13,6 @@ class OSMMapScreenMobile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    MapController mapController = MapController();
-    LatLng currentCenter = ref.read(lastCameraPositionProvider).lastCameraPos;
-    double currentZoom = ref.read(lastCameraPositionProvider).zoom;
     List<Marker> markers = ref.watch(mapMarkersProvider).markers;
     List<Marker> temporaryMarkers =
         ref.watch(mapMarkersProvider).temporaryMarkers;

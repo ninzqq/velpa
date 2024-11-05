@@ -2,17 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 import 'package:velpa/models/local_models.dart';
 
 class AuthService {
   final user = FirebaseAuth.instance.currentUser;
   final firestore = FirebaseFirestore.instance;
 
+  var logger = Logger();
+
   Future<void> anonLogin() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
     } on FirebaseAuthException catch (e) {
-      // handle error
+      logger.e(e.message);
     }
   }
 
@@ -42,7 +45,7 @@ class AuthService {
 
       await FirebaseAuth.instance.signInWithCredential(authCredential);
     } on FirebaseAuthException catch (e) {
-      // handle error
+      logger.e(e.message);
     }
   }
 
@@ -67,8 +70,8 @@ class AuthService {
       });
       registeredSuccessfully = true;
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
+      logger.e('Failed with error code: ${e.code}');
+      logger.e(e.message);
     }
     if (registeredSuccessfully) {
       emailLogin(ref, email, password);
@@ -85,8 +88,8 @@ class AuthService {
       );
       ref.read(userStateProvider).login();
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print(e.message);
+      logger.e('Failed with error code: ${e.code}');
+      logger.e(e.message);
     }
   }
 }
