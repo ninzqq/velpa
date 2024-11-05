@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
 import 'package:velpa/models/local_models.dart';
+import 'package:logger/logger.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
   double lat;
@@ -87,6 +88,8 @@ class MapMarkers extends ChangeNotifier {
   List<MapMarker> markers = [];
   List<MapMarker> temporaryMarkers = [];
 
+  var logger = Logger();
+
   void addMarker(WidgetRef ref) {
     final appFlags = ref.read(appFlagsProvider);
 
@@ -95,7 +98,7 @@ class MapMarkers extends ChangeNotifier {
     markers.add(marker);
 
     if (appFlags.debug) {
-      print('Moved temp marker ${marker.id} to actual markers.');
+      logger.d('Moved temp marker ${marker.id} to actual markers.');
     }
 
     notifyListeners();
@@ -128,7 +131,7 @@ class MapMarkers extends ChangeNotifier {
         ),
         onTap: () => {
           appFlags.debug
-              ? print('Marker $id tapped! Point: ${point.toString()}')
+              ? logger.d('Marker $id tapped! Point: ${point.toString()}')
               : null
         },
       ),
@@ -137,7 +140,7 @@ class MapMarkers extends ChangeNotifier {
     temporaryMarkers.add(tempMarker);
 
     if (appFlags.debug) {
-      print(
+      logger.d(
           'Add temporary marker at lat: ${tempMarker.point.latitude} lon: ${tempMarker.point.longitude}, id: ${tempMarker.id}');
     }
 
@@ -149,13 +152,13 @@ class MapMarkers extends ChangeNotifier {
     temporaryMarkers.clear();
 
     if (appFlags.debug) {
-      print('Temporary markers cleared');
+      logger.d('Temporary markers cleared');
     }
     notifyListeners();
   }
 
   void printMarkers() {
-    print(markers);
+    logger.d(markers);
   }
 }
 
