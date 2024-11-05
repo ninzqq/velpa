@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:uuid/uuid.dart';
 import 'package:velpa/models/local_models.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
@@ -20,75 +22,80 @@ class LastKnownUserPosition with ChangeNotifier {
   }
 }
 
-class MapMarker {
-  String id;
-  String title;
-  String description;
-  String createdBy;
-  DateTime createdAt;
-  DateTime updatedAt;
-  GeoPoint location;
-  List<String> photos;
-  bool isPublic;
+class MapMarker extends Marker {
+  final String id;
+  final String title;
+  final String description;
+  final String createdBy;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<String> photos;
+  final bool isPublic;
+  final bool isVerified;
 
-  MapMarker({
+  const MapMarker({
+    required super.point,
+    required super.child,
     required this.id,
     required this.title,
     required this.description,
     required this.createdBy,
     required this.createdAt,
     required this.updatedAt,
-    required this.location,
     required this.photos,
     required this.isPublic,
+    required this.isVerified,
   });
 
   // Muuntaa Firestore-dokumentin MapMarker-olioksi
   factory MapMarker.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
     return MapMarker(
+      point: LatLng(data['point'].latitude, data['point'].longitude),
+      child: data['child'] ?? '',
       id: data['id'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       createdBy: data['created_by'] ?? '',
       createdAt: (data['created_at'] as Timestamp).toDate(),
       updatedAt: (data['updated_at'] as Timestamp).toDate(),
-      location: data['location'] ?? const GeoPoint(0, 0),
       photos: List<String>.from(data['photos'] ?? []),
       isPublic: data['public'] ?? true,
+      isVerified: data['isVerified'] ?? false,
     );
   }
 
   // Muuntaa MapMarker-olion Map-muotoon Firestorea varten
   Map<String, dynamic> toFirestore() {
     return {
+      'point': point,
+      'child': child,
       'id': id,
       'title': title,
       'description': description,
       'created_by': createdBy,
       'created_at': createdAt,
       'updated_at': updatedAt,
-      'location': location,
       'photos': photos,
       'public': isPublic,
+      'isVerified': false,
     };
   }
 }
 
 class MapMarkers extends ChangeNotifier {
-  List<Marker> markers = [];
-  List<Marker> temporaryMarkers = [];
+  List<MapMarker> markers = [];
+  List<MapMarker> temporaryMarkers = [];
 
   void addMarker(WidgetRef ref) {
     final appFlags = ref.read(appFlagsProvider);
 
-    Marker marker = temporaryMarkers.last;
+    MapMarker marker = temporaryMarkers.last;
 
     markers.add(marker);
 
     if (appFlags.debug) {
-      print(
-          'Add marker at lat: ${marker.point.latitude} lon: ${marker.point.longitude}, key: ${marker.key}');
+      print('Moved temp marker ${marker.id} to actual markers.');
     }
 
     notifyListeners();
@@ -99,14 +106,39 @@ class MapMarkers extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTemporaryMarker(Marker marker, WidgetRef ref) {
+  void addTemporaryMarker(LatLng point, WidgetRef ref) {
     final appFlags = ref.read(appFlagsProvider);
+    final String id = const Uuid().v4();
 
-    temporaryMarkers.add(marker);
+    MapMarker tempMarker = MapMarker(
+      point: point,
+      id: id,
+      title: '',
+      description: '',
+      createdBy: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      photos: const [],
+      isPublic: false,
+      isVerified: false,
+      child: GestureDetector(
+        child: const Icon(
+          Icons.location_on,
+          color: Colors.blue,
+        ),
+        onTap: () => {
+          appFlags.debug
+              ? print('Marker $id tapped! Point: ${point.toString()}')
+              : null
+        },
+      ),
+    );
+
+    temporaryMarkers.add(tempMarker);
 
     if (appFlags.debug) {
       print(
-          'Add temporary marker at lat: ${marker.point.latitude} lon: ${marker.point.longitude}, key: ${marker.key}');
+          'Add temporary marker at lat: ${tempMarker.point.latitude} lon: ${tempMarker.point.longitude}, id: ${tempMarker.id}');
     }
 
     notifyListeners();
@@ -130,25 +162,3 @@ class MapMarkers extends ChangeNotifier {
 final mapMarkersProvider = ChangeNotifierProvider<MapMarkers>((ref) {
   return MapMarkers();
 });
-
-class TemporaryMapMarker extends ChangeNotifier {
-  Marker? marker;
-
-  void setTemporaryMarker(Marker marker) {
-    this.marker = marker;
-    print(
-        'Add temporary marker at lat: ${marker.point.latitude} lon: ${marker.point.longitude}');
-    notifyListeners();
-  }
-
-  void removeTemporaryMarker() {
-    marker = null;
-    notifyListeners();
-  }
-}
-
-final temporaryMapMarkerProvider = ChangeNotifierProvider<TemporaryMapMarker>(
-  (ref) {
-    return TemporaryMapMarker();
-  },
-);

@@ -34,23 +34,7 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 const LatLng(65.3, 27), // Get Finland on the screen on startup
             initialZoom: 5,
             onLongPress: (tapPosition, point) {
-              ref.read(mapMarkersProvider).addTemporaryMarker(
-                    Marker(
-                      key: ValueKey(const Uuid().v1()),
-                      height: 22.0,
-                      point: point,
-                      alignment: Alignment.topCenter,
-                      child: GestureDetector(
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.blue,
-                        ),
-                        onTap: () => print(
-                            'Marker $key tapped! Point: ${point.toString()}'),
-                      ),
-                    ),
-                    ref,
-                  );
+              ref.read(mapMarkersProvider).addTemporaryMarker(point, ref);
               showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
