@@ -10,8 +10,8 @@ class FirestoreService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   var uuid = const Uuid();
 
-  Future<void> addMapMarker(String title, String description, double latitude,
-      double longitude, List<String> photos) async {
+  Future<void> addMapMarker(String title, String water, String description,
+      double latitude, double longitude, List<String> photos) async {
     CollectionReference markers =
         FirebaseFirestore.instance.collection('mapMarkers');
     await markers.add({
@@ -20,6 +20,7 @@ class FirestoreService {
           child: const Text(''),
           id: uuid.v4(),
           title: title,
+          water: water,
           description: description,
           createdBy: FirebaseAuth.instance.currentUser!.uid,
           createdAt: DateTime.parse(FieldValue.serverTimestamp().toString()),

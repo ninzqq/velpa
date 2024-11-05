@@ -27,6 +27,7 @@ class LastKnownUserPosition with ChangeNotifier {
 class MapMarker extends Marker {
   final String id;
   final String title;
+  final String water;
   final String description;
   final String createdBy;
   final DateTime createdAt;
@@ -40,6 +41,7 @@ class MapMarker extends Marker {
     required super.child,
     required this.id,
     required this.title,
+    required this.water,
     required this.description,
     required this.createdBy,
     required this.createdAt,
@@ -57,9 +59,10 @@ class MapMarker extends Marker {
     Map data = doc.data() as Map;
     return MapMarker(
       point: LatLng(data['point'].latitude, data['point'].longitude),
-      child: data['child'] ?? '',
+      child: MarkerMapIcon(data['id']),
       id: data['id'] ?? '',
       title: data['title'] ?? '',
+      water: data['water'] ?? '',
       description: data['description'] ?? '',
       createdBy: data['created_by'] ?? '',
       createdAt: (data['created_at'] as Timestamp).toDate(),
@@ -74,9 +77,10 @@ class MapMarker extends Marker {
   Map<String, dynamic> toFirestore() {
     return {
       'point': point,
-      'child': child,
+      'child': 'Not in Firestore',
       'id': id,
       'title': title,
+      'water': water,
       'description': description,
       'created_by': createdBy,
       'created_at': createdAt,
@@ -121,6 +125,7 @@ class MapMarkers extends ChangeNotifier {
       point: point,
       id: id,
       title: '',
+      water: '',
       description: '',
       createdBy: '',
       createdAt: DateTime.now(),
