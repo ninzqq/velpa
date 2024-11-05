@@ -47,6 +47,9 @@ class MapMarker extends Marker {
     required this.photos,
     required this.isPublic,
     required this.isVerified,
+    // These two are needed to make the icon appear in the correct position
+    super.height = 22.0,
+    super.alignment = Alignment.topCenter,
   });
 
   // Muuntaa Firestore-dokumentin MapMarker-olioksi
