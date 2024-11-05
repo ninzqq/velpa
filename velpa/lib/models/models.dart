@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:logger/logger.dart';
+import 'package:velpa/screens/mobile/widgets/marker_map_icon.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
   double lat;
@@ -124,17 +125,7 @@ class MapMarkers extends ChangeNotifier {
       photos: const [],
       isPublic: false,
       isVerified: false,
-      child: GestureDetector(
-        child: const Icon(
-          Icons.location_on,
-          color: Colors.blue,
-        ),
-        onTap: () => {
-          appFlags.debug
-              ? logger.d('Marker $id tapped! Point: ${point.toString()}')
-              : null
-        },
-      ),
+      child: MarkerMapIcon(id),
     );
 
     temporaryMarkers.add(tempMarker);
@@ -155,6 +146,15 @@ class MapMarkers extends ChangeNotifier {
       logger.d('Temporary markers cleared');
     }
     notifyListeners();
+  }
+
+  MapMarker? getMarkerById(String id) {
+    try {
+      return markers.firstWhere((element) => element.id == id);
+    } catch (e) {
+      logger.e('Marker with id $id not found');
+      return null;
+    }
   }
 
   void printMarkers() {

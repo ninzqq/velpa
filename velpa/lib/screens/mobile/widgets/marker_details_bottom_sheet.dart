@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/models.dart';
 
-class AddNewMarkerBottomSheet extends ConsumerWidget {
-  final LatLng point;
-  const AddNewMarkerBottomSheet({super.key, required this.point});
+class MarkerDetailsBottomSheet extends ConsumerWidget {
+  final String id;
+  const MarkerDetailsBottomSheet({
+    required this.id,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
+    final markerProvider = ref.watch(mapMarkersProvider);
+    final marker = markerProvider.getMarkerById(id);
+
+    if (marker == null) {
+      return const SizedBox.shrink();
+    }
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.4,
       child: BottomSheet(
@@ -25,12 +33,8 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                 Column(
                   children: [
                     Text(
-                      'Add New Marker',
+                      'Marker ${marker.id}',
                       style: theme.textTheme.labelMedium,
-                    ),
-                    Text(
-                      'data: Latitude: ${point.latitude}, Longitude: ${point.longitude}',
-                      style: theme.textTheme.bodyMedium,
                     ),
                   ],
                 ),
@@ -39,16 +43,9 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        ref.read(mapMarkersProvider).addMarker(ref);
                         Navigator.pop(context);
                       },
-                      child: const Text('Add Marker'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Cancel'),
+                      child: const Text('Close'),
                     ),
                   ],
                 ),
