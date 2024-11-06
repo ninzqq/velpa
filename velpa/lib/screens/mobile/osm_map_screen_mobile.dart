@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/widgets/drawer.dart';
@@ -13,6 +14,8 @@ class OSMMapScreenMobile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    MapController mapController =
+        ref.watch(customMapControllerProvider).mapController;
     List<Marker> markers = ref.watch(mapMarkersProvider).markers;
     List<Marker> temporaryMarkers =
         ref.watch(mapMarkersProvider).temporaryMarkers;
@@ -23,8 +26,10 @@ class OSMMapScreenMobile extends ConsumerWidget {
         floatingActionButton: const MapScreenDrawerButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         body: FlutterMap(
-          //mapController: mapController, // if uncommented, this will cause the map freeze
+          mapController:
+              mapController, // if uncommented, this will cause the map freeze
           options: MapOptions(
+            keepAlive: true,
             initialCenter:
                 const LatLng(65.3, 27), // Get Finland on the screen on startup
             initialZoom: 5,
@@ -37,9 +42,9 @@ class OSMMapScreenMobile extends ConsumerWidget {
                     point: point,
                   );
                 },
-              ).whenComplete(
-                () => ref.read(mapMarkersProvider).clearTemporaryMarkers(ref),
-              );
+              ).whenComplete(() {
+                ref.read(mapMarkersProvider).clearTemporaryMarkers(ref);
+              });
             },
           ),
           children: [

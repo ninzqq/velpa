@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -85,4 +86,22 @@ class MapsLastCameraPositionState extends ChangeNotifier {
 final lastCameraPositionProvider =
     ChangeNotifierProvider<MapsLastCameraPositionState>((ref) {
   return MapsLastCameraPositionState();
+});
+
+class CustomMapController extends ChangeNotifier {
+  MapController _mapController = MapController();
+
+  MapController get mapController {
+    return _mapController;
+  }
+
+  void setMapController(MapController controller) {
+    _mapController = controller;
+    notifyListeners();
+  }
+}
+
+final customMapControllerProvider =
+    ChangeNotifierProvider<CustomMapController>((ref) {
+  return CustomMapController();
 });
