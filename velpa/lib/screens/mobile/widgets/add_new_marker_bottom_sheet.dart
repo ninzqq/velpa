@@ -31,7 +31,7 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                       style: theme.textTheme.labelMedium,
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.425,
                       child: ListView(
                         children: const [
                           InputField(
@@ -46,12 +46,12 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                             icon: Icons.description,
                             hintText: 'Description',
                           ),
+                          ConstantData(),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const ConstantData(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
