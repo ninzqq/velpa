@@ -127,7 +127,7 @@ class MapMarkers extends ChangeNotifier {
       title: '',
       water: '',
       description: '',
-      createdBy: '',
+      createdBy: 'Anonymous',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       photos: const [],
