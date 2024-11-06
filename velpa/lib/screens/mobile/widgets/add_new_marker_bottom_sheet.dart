@@ -113,7 +113,7 @@ class ConstantData extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
-    var tempMarker = ref.read(mapMarkersProvider).getTemporaryMarker();
+    var tempMarker = ref.read(mapMarkersProvider).temporaryMarkers.first;
 
     return Padding(
       padding: const EdgeInsets.only(left: 16.0),
