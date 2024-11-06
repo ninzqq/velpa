@@ -55,9 +55,14 @@ class Velpa extends StatelessWidget {
                     // SettingsController to display the correct theme.
                     theme: ThemeData(
                       textTheme: const TextTheme(
-                        bodyMedium: TextStyle(color: Colors.black87),
-                        labelMedium:
-                            TextStyle(color: Colors.black87, fontSize: 16),
+                        bodyMedium:
+                            TextStyle(color: Colors.black87, fontSize: 14),
+                        labelMedium: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                        labelLarge:
+                            TextStyle(color: Colors.black87, fontSize: 24),
                         displayLarge:
                             TextStyle(color: Colors.black87, fontSize: 44),
                         displayMedium:
@@ -77,9 +82,11 @@ class Velpa extends StatelessWidget {
                     darkTheme: ThemeData(
                       textTheme: const TextTheme(
                         bodyMedium:
-                            TextStyle(color: Colors.white70, fontSize: 16),
-                        labelMedium:
-                            TextStyle(color: Colors.white70, fontSize: 18),
+                            TextStyle(color: Colors.white70, fontSize: 14),
+                        labelMedium: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
                         labelLarge:
                             TextStyle(color: Colors.white70, fontSize: 24),
                         displayLarge:
