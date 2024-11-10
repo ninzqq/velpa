@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velpa/profile/profile_screen.dart';
-import 'package:velpa/screens/markers_screen.dart';
+import 'package:velpa/screens/mobile/markers_screen.dart';
 import 'package:velpa/screens/mobile/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:velpa/settings/settings_controller.dart';
