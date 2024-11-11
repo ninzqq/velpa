@@ -55,18 +55,28 @@ class Velpa extends StatelessWidget {
                     // SettingsController to display the correct theme.
                     theme: ThemeData(
                       textTheme: const TextTheme(
-                        bodyMedium:
-                            TextStyle(color: Colors.black87, fontSize: 14),
+                        bodyMedium: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          decoration: TextDecoration.none,
+                          decorationThickness: 0,
+                        ),
                         labelMedium: TextStyle(
                             color: Colors.black87,
                             fontSize: 14,
                             fontWeight: FontWeight.bold),
-                        labelLarge:
-                            TextStyle(color: Colors.black87, fontSize: 24),
-                        displayLarge:
-                            TextStyle(color: Colors.black87, fontSize: 44),
-                        displayMedium:
-                            TextStyle(color: Colors.black87, fontSize: 32),
+                        labelLarge: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 24,
+                        ),
+                        displayLarge: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 44,
+                        ),
+                        displayMedium: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 32,
+                        ),
                       ),
                       colorScheme: ColorScheme.fromSwatch().copyWith(
                         primary: Colors.cyan.shade500,
@@ -77,22 +87,32 @@ class Velpa extends StatelessWidget {
                             Colors.grey.shade200, // background color "light"
                         primaryFixed: Colors.black,
                         tertiary: Colors.black26,
+                        secondaryFixedDim: Colors.grey.shade600,
+                        secondaryContainer: Colors.blueGrey.shade300,
                       ),
                     ),
                     darkTheme: ThemeData(
                       textTheme: const TextTheme(
-                        bodyMedium:
-                            TextStyle(color: Colors.white70, fontSize: 14),
+                        bodyMedium: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
                         labelMedium: TextStyle(
                             color: Colors.white70,
                             fontSize: 14,
                             fontWeight: FontWeight.bold),
-                        labelLarge:
-                            TextStyle(color: Colors.white70, fontSize: 24),
-                        displayLarge:
-                            TextStyle(color: Colors.white70, fontSize: 44),
-                        displayMedium:
-                            TextStyle(color: Colors.white70, fontSize: 32),
+                        labelLarge: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 24,
+                        ),
+                        displayLarge: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 44,
+                        ),
+                        displayMedium: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 32,
+                        ),
                       ),
                       colorScheme: ColorScheme.fromSwatch().copyWith(
                         primary: const Color.fromARGB(255, 20, 25, 46),
@@ -103,6 +123,8 @@ class Velpa extends StatelessWidget {
                             255, 40, 78, 136), // background color "light"
                         primaryFixed: Colors.white54,
                         tertiary: Colors.black26,
+                        secondaryFixedDim: Colors.grey.shade600,
+                        secondaryContainer: Colors.blueGrey.shade300,
                       ),
                     ),
                     themeMode: settingsController.themeMode,
