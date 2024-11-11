@@ -121,10 +121,10 @@ class ConstantData extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Location: \n    Lat: ${tempMarker!.point.latitude}, \n    Lon: ${tempMarker.point.longitude}',
+            'Location: \n    Lat: ${tempMarker.point.latitude}, \n    Lon: ${tempMarker.point.longitude}',
             style: theme.textTheme.bodyMedium,
           ),
-          Text('Created by: ${tempMarker!.createdBy}',
+          Text('Created by: ${tempMarker.createdBy}',
               style: theme.textTheme.bodyMedium),
           Text('Created at: ${tempMarker.createdAt.toString()}',
               style: theme.textTheme.bodyMedium),
