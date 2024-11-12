@@ -3,17 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:logger/logger.dart';
 import 'package:velpa/models/models.dart';
 import 'package:uuid/uuid.dart';
+import 'package:velpa/services/auth.dart';
 
 class FirestoreService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   var uuid = const Uuid();
 
+  Future<void> addTestStuff() async {
+    var user = AuthService().user!;
+    var id = const Uuid().v4();
+    CollectionReference ref =
+        db.collection('users').doc(user.uid).collection('testinks');
+    await ref.doc(id).set({'PASKAA': 'No VITTU', 'JAAHAS': 'JOOHOS'});
+  }
+
   Future<void> addMapMarker(String title, String water, String description,
       double latitude, double longitude, List<String> photos) async {
+    var user = AuthService().user!;
     CollectionReference markers =
-        FirebaseFirestore.instance.collection('mapMarkers');
+        db.collection('users').doc(user.uid).collection('mapMarkers');
     await markers.add({
       MapMarker(
           point: LatLng(latitude, longitude),
@@ -28,14 +39,6 @@ class FirestoreService {
           photos: photos,
           isPublic: true,
           isVerified: false),
-      //  'title': title,
-      //  'description': description,
-      //  'created_by': FirebaseAuth.instance.currentUser?.uid,
-      //  'created_at': FieldValue.serverTimestamp(),
-      //  'updated_at': FieldValue.serverTimestamp(),
-      //  'location': GeoPoint(latitude, longitude),
-      //  'photos': photos,
-      //  'public': true,
     });
   }
 
