@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velpa/models/models.dart';
 import 'package:velpa/services/firestore.dart';
 import 'settings_controller.dart';
 import 'package:velpa/models/local_models.dart';
@@ -86,6 +87,18 @@ class SettingsView extends ConsumerWidget {
           ListTile(
             title: const Text('testinks'),
             onTap: FirestoreService().addTestStuff,
+          ),
+          ListTile(
+            title: const Text('check temp marker'),
+            onTap: () {
+              ref.read(mapMarkersProvider).checkTempMarker();
+            },
+          ),
+          ListTile(
+            title: const Text('claer temp marker'),
+            onTap: () {
+              ref.read(mapMarkersProvider).removeTempMarker();
+            },
           ),
           const Padding(
             padding: EdgeInsets.all(18),

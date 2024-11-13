@@ -18,41 +18,47 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
     if (marker == null) {
       return const SizedBox.shrink();
     }
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.45,
-      child: BottomSheet(
-        enableDrag: false,
-        backgroundColor: theme.colorScheme.primary,
-        onClosing: () {},
-        builder: (context) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+    return SingleChildScrollView(
+      child: Container(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.45,
+          child: BottomSheet(
+            enableDrag: false,
+            backgroundColor: theme.colorScheme.primary,
+            onClosing: () {},
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Marker ${marker.id}',
-                      style: theme.textTheme.labelMedium,
+                    Column(
+                      children: [
+                        Text(
+                          'Marker ${marker.id}',
+                          style: theme.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Close'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Close'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

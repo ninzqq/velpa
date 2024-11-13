@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:logger/logger.dart';
 import 'package:velpa/screens/mobile/widgets/marker_map_icon.dart';
+import 'package:velpa/services/auth.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
   double lat;
@@ -95,6 +96,7 @@ class MapMarker extends Marker {
 class MapMarkers extends ChangeNotifier {
   List<MapMarker> markers = [];
   List<MapMarker> temporaryMarkers = [];
+  MapMarker? tempMarker;
 
   var logger = Logger();
 
@@ -154,6 +156,59 @@ class MapMarkers extends ChangeNotifier {
       logger.d('Temporary markers cleared');
     }
     notifyListeners();
+  }
+
+  void createTempMarker(LatLng point, WidgetRef ref) {
+    final user = AuthService().user;
+    final appFlags = ref.read(appFlagsProvider);
+    final String id = const Uuid().v4();
+
+    tempMarker = MapMarker(
+      point: point,
+      id: id,
+      title: '',
+      water: '',
+      description: '',
+      createdBy: user != null ? user.email.toString() : 'Anonymous',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      photos: const [],
+      isPublic: false,
+      isVerified: false,
+      child: MarkerMapIcon(id),
+    );
+
+    if (appFlags.debug) {
+      logger.d('Created temporary marker with id: ${tempMarker!.id}');
+    }
+
+    notifyListeners();
+  }
+
+  void updateTempMarker(MapMarker marker, WidgetRef ref) {
+    final appFlags = ref.read(appFlagsProvider);
+    tempMarker = marker;
+
+    if (appFlags.debug) {
+      logger.d('Updated temporary marker with id: ${tempMarker!.id}');
+    }
+
+    notifyListeners();
+  }
+
+  void removeTempMarker() {
+    tempMarker = null;
+    notifyListeners();
+  }
+
+  void checkTempMarker() {
+    if (tempMarker == null) {
+      logger.e('No temporary marker found');
+      return;
+    } else {
+      logger.d(
+          'Temporary marker found with \nid: ${tempMarker!.id} \nlat: ${tempMarker!.point.latitude} \nlon: ${tempMarker!.point.longitude} \ntitle: ${tempMarker!.title} \nwater: ${tempMarker!.water} \ndescription: ${tempMarker!.description} \ncreated by: ${tempMarker!.createdBy} \ncreated at: ${tempMarker!.createdAt} \nupdated at: ${tempMarker!.updatedAt} \nphotos: ${tempMarker!.photos} \nis public: ${tempMarker!.isPublic} \nis verified: ${tempMarker!.isVerified}');
+    }
   }
 
   MapMarker? getMarkerById(String id) {

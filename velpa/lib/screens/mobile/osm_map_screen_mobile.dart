@@ -25,6 +25,7 @@ class OSMMapScreenMobile extends ConsumerWidget {
         drawer: const MainDrawer(),
         floatingActionButton: const MapScreenDrawerButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        resizeToAvoidBottomInset: true,
         body: FlutterMap(
           mapController:
               mapController, // if uncommented, this will cause the map freeze
@@ -34,8 +35,9 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 const LatLng(65.3, 27), // Get Finland on the screen on startup
             initialZoom: 5,
             onLongPress: (tapPosition, point) {
-              ref.read(mapMarkersProvider).addTemporaryMarker(point, ref);
+              ref.read(mapMarkersProvider).createTempMarker(point, ref);
               showModalBottomSheet(
+                isScrollControlled: true,
                 context: context,
                 builder: (BuildContext context) {
                   return AddNewMarkerBottomSheet(

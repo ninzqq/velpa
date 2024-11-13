@@ -6,91 +6,104 @@ import 'package:intl/intl.dart';
 
 class AddNewMarkerBottomSheet extends ConsumerWidget {
   final LatLng point;
-  const AddNewMarkerBottomSheet({super.key, required this.point});
+  AddNewMarkerBottomSheet({super.key, required this.point});
+
+  final titleController = TextEditingController();
+  final waterController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.8,
-      child: BottomSheet(
-        enableDrag: false,
-        backgroundColor: theme.colorScheme.primary,
-        onClosing: () {},
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.0),
-            topRight: Radius.circular(12.0),
+    return SingleChildScrollView(
+      child: Container(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.5,
+          child: BottomSheet(
+            enableDrag: false,
+            backgroundColor: theme.colorScheme.primary,
+            onClosing: () {},
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+            ),
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 0, left: 8.0, right: 8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        shrinkWrap: true,
+                        children: [
+                          Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary,
+                              borderRadius: BorderRadius.circular(1.0),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Add new marker',
+                                style: theme.textTheme.labelMedium,
+                              ),
+                            ),
+                          ),
+                          InputField(
+                            icon: Icons.title,
+                            hintText: 'Title',
+                            textController: titleController,
+                          ),
+                          InputField(
+                            icon: Icons.water,
+                            hintText: 'Name of the lake, bond, river, etc.',
+                            textController: waterController,
+                          ),
+                          InputField(
+                            icon: Icons.description,
+                            hintText: 'Description',
+                            textController: descriptionController,
+                          ),
+                          const AdditionalDataContainer(),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      color: theme.colorScheme.primary,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              ref.read(mapMarkersProvider).addMarker(ref);
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Add Marker'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
-        builder: (context) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 0, left: 8.0, right: 8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(1.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Add new marker',
-                      style: theme.textTheme.labelMedium,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    shrinkWrap: true,
-                    children: const [
-                      InputField(
-                        icon: Icons.title,
-                        hintText: 'Title',
-                      ),
-                      InputField(
-                        icon: Icons.water,
-                        hintText: 'Name of the lake, bond, river, etc.',
-                      ),
-                      InputField(
-                        icon: Icons.description,
-                        hintText: 'Description',
-                      ),
-                      AdditionalDataContainer(),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  color: theme.colorScheme.primary,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          ref.read(mapMarkersProvider).addMarker(ref);
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Add Marker'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
       ),
     );
   }
@@ -99,16 +112,18 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
 class InputField extends ConsumerWidget {
   final IconData icon;
   final String hintText;
+  final TextEditingController textController;
   const InputField({
     super.key,
     required this.icon,
     required this.hintText,
+    required this.textController,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    TextEditingController textController = TextEditingController();
     var theme = Theme.of(context);
+    //var tempMarker = ref.read(mapMarkersProvider).temporaryMarkers.first;
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ListTile(
@@ -125,7 +140,7 @@ class InputField extends ConsumerWidget {
         selected: false,
         leading: Icon(icon),
         title: TextField(
-          controller: textController,
+          controller: textController..text,
           maxLines: 1,
           cursorColor: theme.colorScheme.primaryFixed,
           style: theme.textTheme.bodyMedium,
@@ -136,6 +151,7 @@ class InputField extends ConsumerWidget {
             ),
             border: InputBorder.none,
           ),
+          keyboardType: TextInputType.text,
         ),
       ),
     );
@@ -148,7 +164,7 @@ class AdditionalDataContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
-    var tempMarker = ref.read(mapMarkersProvider).temporaryMarkers.first;
+    var tempMarker = ref.read(mapMarkersProvider).tempMarker;
 
     // Define the date format
     var dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss');
@@ -162,28 +178,30 @@ class AdditionalDataContainer extends ConsumerWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AdditionalDataItem(
-                title: 'Location: ',
-                data:
-                    '\n\t\t\t\tLat: ${tempMarker.point.latitude}, \n\t\t\t\tLon: ${tempMarker.point.longitude}',
-              ),
-              AdditionalDataItem(
-                title: 'Created by: ',
-                data: tempMarker.createdBy,
-              ),
-              AdditionalDataItem(
-                title: 'Created at: ',
-                data: dateFormat.format(tempMarker.createdAt),
-              ),
-              AdditionalDataItem(
-                title: 'Last updated: ',
-                data: dateFormat.format(tempMarker.updatedAt),
-              ),
-            ],
-          ),
+          child: tempMarker != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AdditionalDataItem(
+                      title: 'Location: ',
+                      data:
+                          '\n\t\t\t\tLat: ${tempMarker.point.latitude}, \n\t\t\t\tLon: ${tempMarker.point.longitude}',
+                    ),
+                    AdditionalDataItem(
+                      title: 'Created by: ',
+                      data: tempMarker.createdBy,
+                    ),
+                    AdditionalDataItem(
+                      title: 'Created at: ',
+                      data: dateFormat.format(tempMarker.createdAt),
+                    ),
+                    AdditionalDataItem(
+                      title: 'Last updated: ',
+                      data: dateFormat.format(tempMarker.updatedAt),
+                    ),
+                  ],
+                )
+              : const Text('No voee rähmä, vituiks män'),
         ),
       ),
     );
