@@ -13,7 +13,7 @@ class ProfileScreen extends ConsumerWidget {
     var user = AuthService().user;
     var loggedIn = ref.watch(userStateProvider).isLoggedIn;
 
-    if (loggedIn) {
+    if (user != null) {
       return Scaffold(
         appBar: AppBar(
           title: Text(user!.displayName ?? 'Guest'),
