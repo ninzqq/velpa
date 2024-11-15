@@ -6,11 +6,16 @@ import 'package:intl/intl.dart';
 
 class AddNewMarkerBottomSheet extends ConsumerWidget {
   final LatLng point;
-  AddNewMarkerBottomSheet({super.key, required this.point});
+  final TextEditingController titleController;
+  final TextEditingController waterController;
+  final TextEditingController descriptionController;
 
-  final titleController = TextEditingController();
-  final waterController = TextEditingController();
-  final descriptionController = TextEditingController();
+  const AddNewMarkerBottomSheet(
+      {super.key,
+      required this.point,
+      required this.titleController,
+      required this.waterController,
+      required this.descriptionController});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -123,35 +128,59 @@ class InputField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
-    //var tempMarker = ref.read(mapMarkersProvider).temporaryMarkers.first;
+
+    switch (icon) {
+      case Icons.title:
+        textController.text =
+            ref.read(mapMarkersProvider).tempMarker?.title ?? '';
+        break;
+      case Icons.water:
+        textController.text =
+            ref.read(mapMarkersProvider).tempMarker?.water ?? '';
+        break;
+      case Icons.description:
+        textController.text =
+            ref.read(mapMarkersProvider).tempMarker?.description ?? '';
+        break;
+      default:
+        textController.text = '';
+    }
+
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: ListTile(
-        shape: ShapeBorder.lerp(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          1,
-        ),
-        tileColor: theme.colorScheme.secondary,
-        selected: false,
-        leading: Icon(icon),
-        title: TextField(
-          controller: textController..text,
-          maxLines: 1,
-          cursorColor: theme.colorScheme.primaryFixed,
-          style: theme.textTheme.bodyMedium,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: theme.textTheme.bodyMedium!.copyWith(
-              color: theme.colorScheme.secondaryFixedDim,
+      child: Focus(
+        onFocusChange: (hasFocus) {
+          hasFocus ? () => {} : {};
+        },
+        child: ListTile(
+          shape: ShapeBorder.lerp(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
             ),
-            border: InputBorder.none,
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            1,
           ),
-          keyboardType: TextInputType.text,
+          tileColor: theme.colorScheme.secondary,
+          selected: false,
+          leading: Icon(icon),
+          title: TextField(
+            controller: textController..text,
+            onChanged: (a) =>
+                {ref.read(mapMarkersProvider).tempMarker!.setTitle = a},
+            maxLines: 1,
+            cursorColor: theme.colorScheme.primaryFixed,
+            style: theme.textTheme.bodyMedium,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                color: theme.colorScheme.secondaryFixedDim,
+              ),
+              border: InputBorder.none,
+            ),
+            keyboardType: TextInputType.text,
+          ),
         ),
       ),
     );

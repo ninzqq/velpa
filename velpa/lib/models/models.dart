@@ -55,6 +55,48 @@ class MapMarker extends Marker {
     super.alignment = Alignment.topCenter,
   });
 
+  set setPoint(LatLng point) {
+    point = point;
+  }
+
+  set setTitle(String title) {
+    title = title;
+    var logger = Logger();
+    logger.d('Title set to $title');
+  }
+
+  set setWater(String water) {
+    water = water;
+  }
+
+  set setDescription(String description) {
+    description = description;
+  }
+
+  set setCreatedBy(String createdBy) {
+    createdBy = createdBy;
+  }
+
+  set setCreatedAt(DateTime createdAt) {
+    createdAt = createdAt;
+  }
+
+  set setUpdatedAt(DateTime updatedAt) {
+    updatedAt = updatedAt;
+  }
+
+  set setPhotos(List<String> photos) {
+    photos = photos;
+  }
+
+  set setIsPublic(bool isPublic) {
+    isPublic = isPublic;
+  }
+
+  set setIsVerified(bool isVerified) {
+    isVerified = isVerified;
+  }
+
   // Muuntaa Firestore-dokumentin MapMarker-olioksi
   factory MapMarker.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
@@ -182,6 +224,8 @@ class MapMarkers extends ChangeNotifier {
       logger.d('Created temporary marker with id: ${tempMarker!.id}');
     }
 
+    temporaryMarkers.add(tempMarker!);
+
     notifyListeners();
   }
 
@@ -196,8 +240,16 @@ class MapMarkers extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeTempMarker() {
+  void removeTempMarker(WidgetRef ref) {
+    final appFlags = ref.read(appFlagsProvider);
+
     tempMarker = null;
+    temporaryMarkers.clear();
+
+    if (appFlags.debug) {
+      logger.d('Temporary marker cleared');
+    }
+
     notifyListeners();
   }
 

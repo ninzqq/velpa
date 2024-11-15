@@ -19,13 +19,16 @@ class OSMMapScreenMobile extends ConsumerWidget {
     List<Marker> markers = ref.watch(mapMarkersProvider).markers;
     List<Marker> temporaryMarkers =
         ref.watch(mapMarkersProvider).temporaryMarkers;
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController waterController = TextEditingController();
+    final TextEditingController descriptionController = TextEditingController();
 
     return SafeArea(
       child: Scaffold(
         drawer: const MainDrawer(),
         floatingActionButton: const MapScreenDrawerButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         body: FlutterMap(
           mapController:
               mapController, // if uncommented, this will cause the map freeze
@@ -42,10 +45,13 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 builder: (BuildContext context) {
                   return AddNewMarkerBottomSheet(
                     point: point,
+                    titleController: titleController,
+                    waterController: waterController,
+                    descriptionController: descriptionController,
                   );
                 },
               ).whenComplete(() {
-                ref.read(mapMarkersProvider).clearTemporaryMarkers(ref);
+                ref.read(mapMarkersProvider).removeTempMarker(ref);
               });
             },
           ),

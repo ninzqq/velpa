@@ -97,7 +97,7 @@ class SettingsView extends ConsumerWidget {
           ListTile(
             title: const Text('claer temp marker'),
             onTap: () {
-              ref.read(mapMarkersProvider).removeTempMarker();
+              ref.read(mapMarkersProvider).removeTempMarker(ref);
             },
           ),
           const Padding(
