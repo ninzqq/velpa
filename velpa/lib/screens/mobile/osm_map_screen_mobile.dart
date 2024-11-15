@@ -67,7 +67,10 @@ class OSMMapScreenMobile extends ConsumerWidget {
                 markerSize: Size(1, 1),
               ),
             ),
-            MarkerLayer(markers: [...markers, ...temporaryMarkers]),
+            MarkerLayer(markers: [
+              ...markers,
+              ...temporaryMarkers,
+            ]),
           ],
         ),
       ),

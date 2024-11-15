@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/models.dart';
-import 'package:intl/intl.dart';
+import 'package:velpa/screens/mobile/widgets/input_data_field.dart';
+import 'package:velpa/services/firestore.dart';
+import 'package:velpa/screens/mobile/widgets/additional_data.dart';
 
 class AddNewMarkerBottomSheet extends ConsumerWidget {
   final LatLng point;
@@ -90,6 +92,8 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                           ElevatedButton(
                             onPressed: () {
                               ref.read(mapMarkersProvider).addMarker(ref);
+                              FirestoreService().addMapMarkerToFirestore(
+                                  ref.read(mapMarkersProvider).tempMarker!);
                               Navigator.pop(context);
                             },
                             child: const Text('Add Marker'),
@@ -109,152 +113,6 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class InputField extends ConsumerWidget {
-  final IconData icon;
-  final String hintText;
-  final TextEditingController textController;
-  const InputField({
-    super.key,
-    required this.icon,
-    required this.hintText,
-    required this.textController,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var theme = Theme.of(context);
-
-    switch (icon) {
-      case Icons.title:
-        textController.text =
-            ref.read(mapMarkersProvider).tempMarker?.title ?? '';
-        break;
-      case Icons.water:
-        textController.text =
-            ref.read(mapMarkersProvider).tempMarker?.water ?? '';
-        break;
-      case Icons.description:
-        textController.text =
-            ref.read(mapMarkersProvider).tempMarker?.description ?? '';
-        break;
-      default:
-        textController.text = '';
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Focus(
-        onFocusChange: (hasFocus) {
-          hasFocus ? () => {} : {};
-        },
-        child: ListTile(
-          shape: ShapeBorder.lerp(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            1,
-          ),
-          tileColor: theme.colorScheme.secondary,
-          selected: false,
-          leading: Icon(icon),
-          title: TextField(
-            controller: textController..text,
-            onChanged: (a) =>
-                {ref.read(mapMarkersProvider).tempMarker!.setTitle = a},
-            maxLines: 1,
-            cursorColor: theme.colorScheme.primaryFixed,
-            style: theme.textTheme.bodyMedium,
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                color: theme.colorScheme.secondaryFixedDim,
-              ),
-              border: InputBorder.none,
-            ),
-            keyboardType: TextInputType.text,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AdditionalDataContainer extends ConsumerWidget {
-  const AdditionalDataContainer({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var theme = Theme.of(context);
-    var tempMarker = ref.read(mapMarkersProvider).tempMarker;
-
-    // Define the date format
-    var dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss');
-
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: tempMarker != null
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AdditionalDataItem(
-                      title: 'Location: ',
-                      data:
-                          '\n\t\t\t\tLat: ${tempMarker.point.latitude}, \n\t\t\t\tLon: ${tempMarker.point.longitude}',
-                    ),
-                    AdditionalDataItem(
-                      title: 'Created by: ',
-                      data: tempMarker.createdBy,
-                    ),
-                    AdditionalDataItem(
-                      title: 'Created at: ',
-                      data: dateFormat.format(tempMarker.createdAt),
-                    ),
-                    AdditionalDataItem(
-                      title: 'Last updated: ',
-                      data: dateFormat.format(tempMarker.updatedAt),
-                    ),
-                  ],
-                )
-              : const Text('No voee rähmä, vituiks män'),
-        ),
-      ),
-    );
-  }
-}
-
-class AdditionalDataItem extends ConsumerWidget {
-  final String title;
-  final String data;
-  const AdditionalDataItem({
-    super.key,
-    required this.title,
-    required this.data,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Text(
-        title + data,
-        style: theme.textTheme.bodyMedium,
       ),
     );
   }

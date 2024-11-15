@@ -17,29 +17,30 @@ class FirestoreService {
     var id = const Uuid().v4();
     CollectionReference ref =
         db.collection('users').doc(user.uid).collection('testinks');
-    await ref.doc(id).set({'PASKAA': 'No VITTU', 'JAAHAS': 'JOOHOS'});
+    await ref.doc(id).set({
+      'PASKAA': 'No VITTU',
+      'JAAHAS': 'JOOHOS',
+    });
   }
 
-  Future<void> addMapMarker(String title, String water, String description,
-      double latitude, double longitude, List<String> photos) async {
+  Future<void> addMapMarkerToFirestore(MapMarker marker) async {
     var user = AuthService().user!;
-    CollectionReference markers =
-        db.collection('users').doc(user.uid).collection('mapMarkers');
-    await markers.add({
-      MapMarker(
-          point: LatLng(latitude, longitude),
-          child: const Text(''),
-          id: uuid.v4(),
-          title: title,
-          water: water,
-          description: description,
-          createdBy: FirebaseAuth.instance.currentUser!.uid,
-          createdAt: DateTime.parse(FieldValue.serverTimestamp().toString()),
-          updatedAt: DateTime.parse(FieldValue.serverTimestamp().toString()),
-          photos: photos,
-          isPublic: true,
-          isVerified: false),
-    });
+    CollectionReference ref = db.collection('unverifiedMarkers');
+
+    var data = {
+      'point': GeoPoint(marker.point.latitude, marker.point.longitude),
+      'title': marker.title,
+      'water': marker.water,
+      'description': marker.description,
+      'createdBy': user.email,
+      'createdAt': marker.createdAt,
+      'updatedAt': marker.updatedAt,
+      'photos': marker.photos,
+      'isPublic': false,
+      'isVerified': false,
+    };
+
+    await ref.doc(marker.id).set(data);
   }
 
   Future<QuerySnapshot> getMapMarkers() async {

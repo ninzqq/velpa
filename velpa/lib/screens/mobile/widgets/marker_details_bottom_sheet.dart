@@ -23,7 +23,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.45,
+          height: MediaQuery.of(context).size.height * 0.55,
           child: BottomSheet(
             enableDrag: false,
             backgroundColor: theme.colorScheme.primary,
@@ -37,7 +37,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                     Column(
                       children: [
                         Text(
-                          'Marker ${marker.id}',
+                          marker.title,
                           style: theme.textTheme.labelMedium,
                         ),
                       ],

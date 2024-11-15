@@ -55,48 +55,6 @@ class MapMarker extends Marker {
     super.alignment = Alignment.topCenter,
   });
 
-  set setPoint(LatLng point) {
-    point = point;
-  }
-
-  set setTitle(String title) {
-    title = title;
-    var logger = Logger();
-    logger.d('Title set to $title');
-  }
-
-  set setWater(String water) {
-    water = water;
-  }
-
-  set setDescription(String description) {
-    description = description;
-  }
-
-  set setCreatedBy(String createdBy) {
-    createdBy = createdBy;
-  }
-
-  set setCreatedAt(DateTime createdAt) {
-    createdAt = createdAt;
-  }
-
-  set setUpdatedAt(DateTime updatedAt) {
-    updatedAt = updatedAt;
-  }
-
-  set setPhotos(List<String> photos) {
-    photos = photos;
-  }
-
-  set setIsPublic(bool isPublic) {
-    isPublic = isPublic;
-  }
-
-  set setIsVerified(bool isVerified) {
-    isVerified = isVerified;
-  }
-
   // Muuntaa Firestore-dokumentin MapMarker-olioksi
   factory MapMarker.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
@@ -133,6 +91,36 @@ class MapMarker extends Marker {
       'isVerified': false,
     };
   }
+
+  MapMarker copyWith({
+    LatLng? point,
+    Widget? child,
+    String? id,
+    String? title,
+    String? water,
+    String? description,
+    String? createdBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<String>? photos,
+    bool? isPublic,
+    bool? isVerified,
+  }) {
+    return MapMarker(
+      point: point ?? this.point,
+      child: child ?? this.child,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      water: water ?? this.water,
+      description: description ?? this.description,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      photos: photos ?? this.photos,
+      isPublic: isPublic ?? this.isPublic,
+      isVerified: isVerified ?? this.isVerified,
+    );
+  }
 }
 
 class MapMarkers extends ChangeNotifier {
@@ -145,7 +133,7 @@ class MapMarkers extends ChangeNotifier {
   void addMarker(WidgetRef ref) {
     final appFlags = ref.read(appFlagsProvider);
 
-    MapMarker marker = temporaryMarkers.last;
+    MapMarker marker = tempMarker!;
 
     markers.add(marker);
 
@@ -153,40 +141,13 @@ class MapMarkers extends ChangeNotifier {
       logger.d('Moved temp marker ${marker.id} to actual markers.');
     }
 
+    checkTempMarker();
+
     notifyListeners();
   }
 
   void removeLastMarker() {
     markers.removeLast();
-    notifyListeners();
-  }
-
-  void addTemporaryMarker(LatLng point, WidgetRef ref) {
-    final appFlags = ref.read(appFlagsProvider);
-    final String id = const Uuid().v4();
-
-    MapMarker tempMarker = MapMarker(
-      point: point,
-      id: id,
-      title: '',
-      water: '',
-      description: '',
-      createdBy: 'Anonymous',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      photos: const [],
-      isPublic: false,
-      isVerified: false,
-      child: MarkerMapIcon(id),
-    );
-
-    temporaryMarkers.add(tempMarker);
-
-    if (appFlags.debug) {
-      logger.d(
-          'Add temporary marker at lat: ${tempMarker.point.latitude} lon: ${tempMarker.point.longitude}, id: ${tempMarker.id}');
-    }
-
     notifyListeners();
   }
 
