@@ -16,7 +16,7 @@ class InputField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
-    MapMarker updatedTempMarker = ref.read(mapMarkersProvider).tempMarker!;
+    var updatedTempMarker;
 
     return Padding(
       padding: const EdgeInsets.all(2.0),

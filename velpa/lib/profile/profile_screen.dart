@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:velpa/models/local_models.dart';
 import 'package:velpa/services/auth.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -11,7 +10,6 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var user = AuthService().user;
-    var loggedIn = ref.watch(userStateProvider).isLoggedIn;
 
     if (user != null) {
       return Scaffold(

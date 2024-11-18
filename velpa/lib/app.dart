@@ -77,6 +77,10 @@ class Velpa extends StatelessWidget {
                           color: Colors.black87,
                           fontSize: 32,
                         ),
+                        titleLarge: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 24,
+                        ),
                       ),
                       colorScheme: ColorScheme.fromSwatch().copyWith(
                         primary: Colors.cyan.shade500,
@@ -89,6 +93,7 @@ class Velpa extends StatelessWidget {
                         tertiary: Colors.black26,
                         secondaryFixedDim: Colors.grey.shade600,
                         secondaryContainer: Colors.blueGrey.shade300,
+                        tertiaryContainer: Colors.cyan.shade100,
                       ),
                     ),
                     darkTheme: ThemeData(
@@ -113,6 +118,10 @@ class Velpa extends StatelessWidget {
                           color: Colors.white70,
                           fontSize: 32,
                         ),
+                        titleLarge: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 24,
+                        ),
                       ),
                       colorScheme: ColorScheme.fromSwatch().copyWith(
                         primary: const Color.fromARGB(255, 20, 25, 46),
@@ -125,6 +134,7 @@ class Velpa extends StatelessWidget {
                         tertiary: Colors.black26,
                         secondaryFixedDim: Colors.grey.shade600,
                         secondaryContainer: Colors.blueGrey.shade300,
+                        tertiaryContainer: Colors.blueGrey.shade900,
                       ),
                     ),
                     themeMode: settingsController.themeMode,

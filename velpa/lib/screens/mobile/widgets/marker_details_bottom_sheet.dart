@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:velpa/models/models.dart';
 
 class MarkerDetailsBottomSheet extends ConsumerWidget {
@@ -12,12 +14,68 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
+    double width = MediaQuery.of(context).size.width;
     final markerProvider = ref.watch(mapMarkersProvider);
     final marker = markerProvider.getMarkerById(id);
+
+    var dateFormat = DateFormat('dd.MM.yyyy HH:mm');
 
     if (marker == null) {
       return const SizedBox.shrink();
     }
+
+    final List<Map<String, dynamic>> detailItems = [
+      {
+        "leading": "Water: ",
+        "icon": const Icon(
+          Icons.water,
+          color: Colors.blue,
+        ),
+        "value": marker.water,
+      },
+      {
+        "leading": "Location: ",
+        "icon": const Icon(
+          Icons.location_on,
+          color: Colors.green,
+        ),
+        "value":
+            '\nLat: ${marker.point.latitude.toString()}\nLon: ${marker.point.longitude.toString()}',
+      },
+      {
+        "leading": "Description: ",
+        "icon": const Icon(
+          Icons.description,
+          color: Colors.grey,
+        ),
+        "value": marker.description,
+      },
+      {
+        "leading": "Created by: ",
+        "icon": const Icon(
+          Icons.person,
+          color: Colors.orange,
+        ),
+        "value": marker.createdBy,
+      },
+      {
+        "leading": "Created on: ",
+        "icon": const Icon(
+          Icons.calendar_today,
+          color: Colors.red,
+        ),
+        "value": dateFormat.format(marker.createdAt),
+      },
+      {
+        "leading": "Last update: ",
+        "icon": const Icon(
+          Icons.update,
+          color: Colors.red,
+        ),
+        "value": dateFormat.format(marker.updatedAt),
+      }
+    ];
+
     return SingleChildScrollView(
       child: Container(
         padding:
@@ -34,31 +92,49 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        DetailItem(
-                          data: marker.title,
-                        ),
-                        DetailItem(
-                          data: marker.water,
-                        ),
-                        DetailItem(
-                          data:
-                              'Location: \n\t\tLat:${marker.point.latitude.toString()}\n\t\tLon:${marker.point.longitude.toString()}',
-                        ),
-                        DetailItem(
-                          data: marker.description,
-                        ),
-                        DetailItem(
-                          data: marker.createdBy,
-                        ),
-                        DetailItem(
-                          data: marker.createdAt.toString(),
-                        ),
-                        DetailItem(
-                          data: marker.updatedAt.toString(),
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            width: width * 0.9,
+                            margin: const EdgeInsets.all(2.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              marker.title,
+                              style: theme.textTheme.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: detailItems.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  leading: detailItems[index]['icon'],
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: detailItems[index]['leading'],
+                                      style: theme.textTheme.labelMedium,
+                                      children: [
+                                        TextSpan(
+                                          text: detailItems[index]['value'],
+                                          style: theme.textTheme.bodyMedium,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  //subtitle: detailItems[index]['value'],
+                                  dense: true,
+                                  visualDensity:
+                                      const VisualDensity(vertical: -4),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -77,25 +153,6 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class DetailItem extends ConsumerWidget {
-  final String data;
-  const DetailItem({
-    required this.data,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var theme = Theme.of(context);
-    return SizedBox(
-      child: Text(
-        data,
-        style: theme.textTheme.labelSmall,
       ),
     );
   }
