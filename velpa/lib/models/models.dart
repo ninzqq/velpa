@@ -37,23 +37,24 @@ class MapMarker extends Marker {
   final bool isPublic;
   final bool isVerified;
 
-  const MapMarker({
-    required super.point,
-    required super.child,
-    required this.id,
-    required this.title,
-    required this.water,
-    required this.description,
-    required this.createdBy,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.photos,
-    required this.isPublic,
-    required this.isVerified,
+  MapMarker({
+    super.point = const LatLng(0.0, 0.0),
+    super.child = const Icon(Icons.location_on),
+    this.id = '',
+    this.title = '',
+    this.water = '',
+    this.description = '',
+    this.createdBy = '',
+    this.photos = const [],
+    this.isPublic = false,
+    this.isVerified = false,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     // These two are needed to make the icon appear in the correct position
     super.height = 22.0,
     super.alignment = Alignment.topCenter,
-  });
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 
   // Muuntaa Firestore-dokumentin MapMarker-olioksi
   factory MapMarker.fromFirestore(DocumentSnapshot doc) {

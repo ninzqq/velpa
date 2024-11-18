@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerWidget {
     if (user != null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(user!.displayName ?? 'Guest'),
+          title: Text(user.displayName ?? 'Guest'),
         ),
         body: SafeArea(
           child: Container(

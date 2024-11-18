@@ -36,9 +36,27 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                   children: [
                     Column(
                       children: [
-                        Text(
-                          marker.title,
-                          style: theme.textTheme.labelMedium,
+                        DetailItem(
+                          data: marker.title,
+                        ),
+                        DetailItem(
+                          data: marker.water,
+                        ),
+                        DetailItem(
+                          data:
+                              'Location: \n\t\tLat:${marker.point.latitude.toString()}\n\t\tLon:${marker.point.longitude.toString()}',
+                        ),
+                        DetailItem(
+                          data: marker.description,
+                        ),
+                        DetailItem(
+                          data: marker.createdBy,
+                        ),
+                        DetailItem(
+                          data: marker.createdAt.toString(),
+                        ),
+                        DetailItem(
+                          data: marker.updatedAt.toString(),
                         ),
                       ],
                     ),
@@ -59,6 +77,25 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DetailItem extends ConsumerWidget {
+  final String data;
+  const DetailItem({
+    required this.data,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var theme = Theme.of(context);
+    return SizedBox(
+      child: Text(
+        data,
+        style: theme.textTheme.labelSmall,
       ),
     );
   }

@@ -28,7 +28,7 @@ class OSMMapScreenMobile extends ConsumerWidget {
         drawer: const MainDrawer(),
         floatingActionButton: const MapScreenDrawerButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: FlutterMap(
           mapController:
               mapController, // if uncommented, this will cause the map freeze
