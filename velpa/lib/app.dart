@@ -8,6 +8,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:velpa/settings/settings_view.dart';
 
 class Velpa extends StatelessWidget {
+  static final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   Velpa({super.key, required this.settingsController});
 
   final SettingsController settingsController;
@@ -33,6 +36,7 @@ class Velpa extends StatelessWidget {
                 // Once completed, show application
                 if (snapshot.connectionState == ConnectionState.done) {
                   return MaterialApp(
+                    scaffoldMessengerKey: rootScaffoldMessengerKey,
                     // Providing a restorationScopeId allows the Navigator built by the
                     // MaterialApp to restore the navigation stack when a user leaves and
                     // returns to the app after it has been killed while running in the
