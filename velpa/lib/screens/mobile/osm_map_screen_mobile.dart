@@ -43,8 +43,7 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         resizeToAvoidBottomInset: true,
         body: FlutterMap(
-          mapController:
-              mapController, // if uncommented, this will cause the map freeze
+          mapController: mapController,
           options: MapOptions(
             keepAlive: true,
             initialCenter:
