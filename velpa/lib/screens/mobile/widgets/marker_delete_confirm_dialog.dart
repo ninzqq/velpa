@@ -24,7 +24,8 @@ class DeleteMarkerConfirmDialog extends ConsumerWidget {
             final nav = Navigator.of(context);
             FirestoreService().deleteMapMarker(markerId).then((_) {
               ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
-              showSnackBar('Marker deleted');
+              showSnackBar('Marker deleted',
+                  const Icon(Icons.check_circle_rounded, color: Colors.green));
               nav.popUntil((route) => route.isFirst);
             });
           },
