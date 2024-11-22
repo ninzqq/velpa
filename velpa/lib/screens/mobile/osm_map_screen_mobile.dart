@@ -21,7 +21,7 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(mapMarkersProvider).loadMarkersFromFirestore();
+      ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
     });
   }
 

@@ -133,11 +133,12 @@ class MapMarkers extends ChangeNotifier {
 
   var logger = Logger();
 
-  Future<void> loadMarkersFromFirestore() async {
+  Future<void> loadMarkersFromFirestore(WidgetRef ref) async {
+    final appFlags = ref.read(appFlagsProvider);
+
     try {
       List<MapMarker> firestoreMarkers =
           await FirestoreService().getUnverifiedMarkers();
-      showSnackBar('Markers loaded from firestore');
       markers = firestoreMarkers
           .map((marker) => MapMarker(
                 point: marker.point,
@@ -155,6 +156,9 @@ class MapMarkers extends ChangeNotifier {
               ))
           .toList();
       notifyListeners();
+      if (appFlags.debug) {
+        logger.d('${markers.length} markers loaded from firestore');
+      }
     } catch (e) {
       logger.e('Error loading markers: $e');
       showSnackBar('Error loading markers: $e');

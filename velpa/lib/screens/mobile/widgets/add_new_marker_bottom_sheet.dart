@@ -91,10 +91,17 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              ref.read(mapMarkersProvider).addMarker(ref);
-                              FirestoreService().addMapMarkerToFirestore(
-                                  ref.read(mapMarkersProvider).tempMarker!);
-                              Navigator.pop(context);
+                              final nav = Navigator.of(context);
+                              //ref.read(mapMarkersProvider).addMarker(ref);
+                              FirestoreService()
+                                  .addMapMarkerToFirestore(
+                                      ref.read(mapMarkersProvider).tempMarker!)
+                                  .then((_) {
+                                ref
+                                    .read(mapMarkersProvider)
+                                    .loadMarkersFromFirestore(ref);
+                                nav.pop();
+                              });
                             },
                             child: const Text('Add Marker'),
                           ),
