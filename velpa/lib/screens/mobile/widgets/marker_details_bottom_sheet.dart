@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:velpa/models/models.dart';
+import 'package:velpa/screens/mobile/widgets/marker_delete_confirm_dialog.dart';
 
 class MarkerDetailsBottomSheet extends ConsumerWidget {
   final String id;
@@ -137,6 +137,15 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            final nav = Navigator.of(context);
+                            nav.push(MaterialPageRoute(
+                                builder: (context) =>
+                                    DeleteMarkerConfirmDialog(markerId: id)));
+                          },
+                          child: const Text('Delete marker'),
+                        ),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);

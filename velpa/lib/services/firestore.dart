@@ -71,8 +71,11 @@ class FirestoreService {
   }
 
   Future<void> deleteMapMarker(String markerId) async {
-    DocumentReference marker =
-        FirebaseFirestore.instance.collection('mapMarkers').doc(markerId);
-    await marker.delete();
+    DocumentReference marker = FirebaseFirestore.instance
+        .collection('unverifiedMarkers')
+        .doc(markerId);
+    await marker.delete().then((_) {
+      logger.d('Deleted unverified marker from firestore: $markerId');
+    });
   }
 }
