@@ -74,9 +74,9 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
             ),
             CurrentLocationLayer(
               alignPositionOnUpdate: AlignOnUpdate.never,
-              alignDirectionOnUpdate: AlignOnUpdate.always,
+              alignDirectionOnUpdate: AlignOnUpdate.never,
               style: const LocationMarkerStyle(
-                markerSize: Size(1, 1),
+                markerSize: Size(12, 12),
               ),
             ),
             MarkerLayer(markers: [

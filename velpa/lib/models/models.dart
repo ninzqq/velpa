@@ -164,6 +164,7 @@ class MapMarkers extends ChangeNotifier {
       showSnackBar(
         'Error loading markers: $e',
         const Icon(Icons.priority_high_rounded, color: Colors.red),
+        duration: const Duration(seconds: 5),
       );
     }
   }
