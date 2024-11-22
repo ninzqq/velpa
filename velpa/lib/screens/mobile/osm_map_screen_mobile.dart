@@ -9,11 +9,24 @@ import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/widgets/drawer.dart';
 import 'package:velpa/widgets/map_screen_drawer_button.dart';
 
-class OSMMapScreenMobile extends ConsumerWidget {
+class OSMMapScreenMobile extends ConsumerStatefulWidget {
   const OSMMapScreenMobile({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  OSMMapScreenMobileState createState() => OSMMapScreenMobileState();
+}
+
+class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(mapMarkersProvider).loadMarkersFromFirestore();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     MapController mapController =
         ref.watch(customMapControllerProvider).mapController;
     List<Marker> markers = ref.watch(mapMarkersProvider).markers;

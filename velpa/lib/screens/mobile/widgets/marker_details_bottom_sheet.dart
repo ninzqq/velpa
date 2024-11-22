@@ -34,6 +34,14 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         "value": marker.water,
       },
       {
+        "leading": "Description: ",
+        "icon": const Icon(
+          Icons.description,
+          color: Colors.grey,
+        ),
+        "value": marker.description,
+      },
+      {
         "leading": "Location: ",
         "icon": const Icon(
           Icons.location_on,
@@ -41,14 +49,6 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         ),
         "value":
             '\nLat: ${marker.point.latitude.toString()}\nLon: ${marker.point.longitude.toString()}',
-      },
-      {
-        "leading": "Description: ",
-        "icon": const Icon(
-          Icons.description,
-          color: Colors.grey,
-        ),
-        "value": marker.description,
       },
       {
         "leading": "Created by: ",
@@ -125,10 +125,8 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                                       ],
                                     ),
                                   ),
-                                  //subtitle: detailItems[index]['value'],
                                   dense: true,
-                                  visualDensity:
-                                      const VisualDensity(vertical: -4),
+                                  visualDensity: VisualDensity.compact,
                                 );
                               },
                             ),

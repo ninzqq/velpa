@@ -8,6 +8,8 @@ import 'package:velpa/models/local_models.dart';
 import 'package:logger/logger.dart';
 import 'package:velpa/screens/mobile/widgets/marker_map_icon.dart';
 import 'package:velpa/services/auth.dart';
+import 'package:velpa/services/firestore.dart';
+import 'package:velpa/utils/snackbar.dart';
 
 class LastKnownUserPosition with ChangeNotifier {
   double lat;
@@ -131,6 +133,34 @@ class MapMarkers extends ChangeNotifier {
 
   var logger = Logger();
 
+  Future<void> loadMarkersFromFirestore() async {
+    try {
+      List<MapMarker> firestoreMarkers =
+          await FirestoreService().getUnverifiedMarkers();
+      showSnackBar('Markers loaded from firestore');
+      markers = firestoreMarkers
+          .map((marker) => MapMarker(
+                point: marker.point,
+                child: MarkerMapIcon(marker.id),
+                id: marker.id,
+                title: marker.title,
+                water: marker.water,
+                description: marker.description,
+                createdBy: marker.createdBy,
+                createdAt: marker.createdAt,
+                updatedAt: marker.updatedAt,
+                photos: marker.photos,
+                isPublic: marker.isPublic,
+                isVerified: marker.isVerified,
+              ))
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      logger.e('Error loading markers: $e');
+      showSnackBar('Error loading markers: $e');
+    }
+  }
+
   void addMarker(WidgetRef ref) {
     final appFlags = ref.read(appFlagsProvider);
 
@@ -166,9 +196,11 @@ class MapMarkers extends ChangeNotifier {
     final user = AuthService().user;
     final appFlags = ref.read(appFlagsProvider);
     final String id = const Uuid().v4();
+    double latitude = double.parse(point.latitude.toStringAsFixed(7));
+    double longitude = double.parse(point.longitude.toStringAsFixed(7));
 
     tempMarker = MapMarker(
-      point: point,
+      point: LatLng(latitude, longitude),
       id: id,
       title: '',
       water: '',
