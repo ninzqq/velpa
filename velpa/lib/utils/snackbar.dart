@@ -6,7 +6,16 @@ void showSnackBar(String message, Icon icon, {Duration? duration}) {
   if (messenger != null) {
     messenger.showSnackBar(
       SnackBar(
-        content: Row(children: [icon, Text(message)]),
+        content: Row(children: [
+          icon,
+          Flexible(
+            child: Text.rich(
+              TextSpan(
+                text: message,
+              ),
+            ),
+          )
+        ]),
         duration: duration ?? const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(20),

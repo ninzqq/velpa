@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:velpa/profile/profile_screen.dart';
+import 'package:velpa/profile/userloginstatuscheck.dart';
 import 'package:velpa/screens/mobile/markers_screen.dart';
 import 'package:velpa/screens/mobile/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -157,8 +157,8 @@ class Velpa extends StatelessWidget {
                               return const HomeScreen();
                             case MarkersScreen.routeName:
                               return const MarkersScreen();
-                            case ProfileScreen.routeName:
-                              return const ProfileScreen();
+                            case UserLogInStatusCheck.routeName:
+                              return const UserLogInStatusCheck();
                             default:
                               return const HomeScreen();
                           }

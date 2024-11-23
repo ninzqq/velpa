@@ -96,8 +96,16 @@ class CustomMapController extends ChangeNotifier {
   }
 
   void setMapController(MapController controller) {
-    _mapController = controller;
-    notifyListeners();
+    if (_mapController != controller) {
+      _mapController = controller;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
   }
 }
 

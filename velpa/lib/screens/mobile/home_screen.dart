@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +20,7 @@ class HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   User? currentUser;
+  StreamSubscription<User?>? _authStateSubscription;
 
   double? lat;
   double? lon;
@@ -28,11 +30,22 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    auth.authStateChanges().listen((User? user) {
-      setState(() {
-        currentUser = user;
-      });
+    // Use a StreamSubscription to manage the listener
+    _authStateSubscription = auth.authStateChanges().listen((User? user) {
+      if (mounted) {
+        // Check if widget is still mounted before calling setState
+        setState(() {
+          currentUser = user;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription when the widget is disposed
+    _authStateSubscription?.cancel();
+    super.dispose();
   }
 
   @override

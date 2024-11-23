@@ -17,18 +17,19 @@ class OSMMapScreenMobile extends ConsumerStatefulWidget {
 }
 
 class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
+  late MapController mapController;
   @override
   void initState() {
     super.initState();
+    mapController = MapController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
+      ref.read(customMapControllerProvider).setMapController(mapController);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    MapController mapController =
-        ref.watch(customMapControllerProvider).mapController;
     List<Marker> markers = ref.watch(mapMarkersProvider).markers;
     List<Marker> temporaryMarkers =
         ref.watch(mapMarkersProvider).temporaryMarkers;

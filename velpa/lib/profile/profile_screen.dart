@@ -5,8 +5,6 @@ import 'package:velpa/services/auth.dart';
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  static const routeName = '/profile';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var user = AuthService().user;
@@ -56,14 +54,16 @@ class ProfileScreen extends ConsumerWidget {
         ),
       );
     } else {
-      return buildAuthForm(ref);
+      return buildAuthForm(context, ref);
     }
   }
 
-  Widget buildAuthForm(WidgetRef ref) {
+  Widget buildAuthForm(BuildContext context, WidgetRef ref) {
+    var theme = Theme.of(context);
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Log in or register'),
       ),
@@ -74,11 +74,22 @@ class ProfileScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary,
+                  border:
+                      Border.all(color: theme.colorScheme.tertiary, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                ),
               ),
               TextField(
+                keyboardType: TextInputType.visiblePassword,
                 controller: passwordController,
                 decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
