@@ -11,6 +11,10 @@ class LoginScreen extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Log in', style: theme.textTheme.titleLarge),
+      ),
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: const EdgeInsets.all(40),
         child: Column(
@@ -71,7 +75,7 @@ class LoginScreen extends ConsumerWidget {
                 color: Colors.deepPurple,
               ),
             ),
-            const Center(child: Text('OR')),
+            Center(child: Text('OR', style: theme.textTheme.titleLarge)),
             Flexible(
               child: LoginButton(
                 icon: Icons.account_circle_rounded,
