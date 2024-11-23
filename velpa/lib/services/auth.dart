@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
@@ -36,19 +37,62 @@ class AuthService {
 
   Future<void> googleLogin() async {
     try {
-      final googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) return;
-
-      final googleAuth = await googleUser.authentication;
-      final authCredential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          'email',
+          'profile',
+        ],
       );
 
-      await FirebaseAuth.instance.signInWithCredential(authCredential);
-    } on FirebaseAuthException catch (e) {
-      logger.e(e.message);
+      // First sign out to make sure we don't have any cached credentials
+      await googleSignIn.signOut();
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        // User canceled the sign-in flow
+        logger.i('Google Sign In was canceled by user');
+        return;
+      }
+
+      try {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+        var user = FirebaseAuth.instance.currentUser;
+
+        await firestore.collection('users').doc(user!.uid).set({
+          'username': user.email?.split('@')[0],
+          'email': user.email,
+          'isVerified': false,
+          'created_at': FieldValue.serverTimestamp(),
+        });
+      } catch (e) {
+        logger.e('Error during Google authentication: $e');
+        showSnackBar(
+          'Failed to authenticate with Google',
+          const Icon(Icons.error, color: Colors.red),
+        );
+      }
+    } on PlatformException catch (e) {
+      logger.e(
+          'Platform Exception during Google Sign In: ${e.code} - ${e.message}');
+      showSnackBar(
+        'Google Sign In failed: ${e.message}',
+        const Icon(Icons.error, color: Colors.red),
+      );
+    } catch (e) {
+      logger.e('Unexpected error during Google Sign In: $e');
+      showSnackBar(
+        'An unexpected error occurred',
+        const Icon(Icons.error, color: Colors.red),
+      );
     }
   }
 
