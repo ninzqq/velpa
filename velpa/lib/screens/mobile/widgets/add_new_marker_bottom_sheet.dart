@@ -89,6 +89,7 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                       ),
                       Container(
                         height: 50,
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
                         color: theme.colorScheme.primary,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

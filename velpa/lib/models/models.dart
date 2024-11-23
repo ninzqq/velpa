@@ -267,10 +267,17 @@ class MapMarkers extends ChangeNotifier {
 
   MapMarker? getMarkerById(String id) {
     try {
-      return markers.firstWhere((element) => element.id == id);
+      var marker = markers.firstWhere((element) => element.id == id);
+      return marker;
     } catch (e) {
-      logger.e('Marker with id $id not found');
-      return null;
+      try {
+        var tempMarker =
+            temporaryMarkers.firstWhere((element) => element.id == id);
+        return tempMarker;
+      } catch (e) {
+        logger.e('Marker with id $id not found');
+        return null;
+      }
     }
   }
 
