@@ -50,8 +50,10 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
           options: MapOptions(
             keepAlive: true,
             initialCenter:
-                const LatLng(65.3, 27), // Get Finland on the screen on startup
-            initialZoom: 5,
+                const LatLng(65.3, 26), // Get Finland on the screen on startup
+            initialZoom: 5.25,
+            interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag),
             onLongPress: (tapPosition, point) {
               if (AuthService().user == null) {
                 showSnackBar('Please login to add a marker',
