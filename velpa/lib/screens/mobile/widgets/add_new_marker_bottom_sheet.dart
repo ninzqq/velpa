@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/input_data_field.dart';
+import 'package:velpa/services/auth.dart';
 import 'package:velpa/services/firestore.dart';
 import 'package:velpa/screens/mobile/widgets/additional_data.dart';
 import 'package:velpa/utils/snackbar.dart';
@@ -99,6 +100,12 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                                     descriptionController.text.isEmpty) {
                                   showSnackBar(
                                       'Please fill in all fields',
+                                      const Icon(Icons.priority_high_rounded,
+                                          color: Colors.red));
+                                  return;
+                                } else if (AuthService().user == null) {
+                                  showSnackBar(
+                                      'Please login to add a marker',
                                       const Icon(Icons.priority_high_rounded,
                                           color: Colors.red));
                                   return;

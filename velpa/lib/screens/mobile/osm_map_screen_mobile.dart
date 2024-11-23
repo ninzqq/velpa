@@ -6,6 +6,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
+import 'package:velpa/services/auth.dart';
+import 'package:velpa/utils/snackbar.dart';
 import 'package:velpa/widgets/drawer.dart';
 import 'package:velpa/widgets/map_screen_drawer_button.dart';
 
@@ -51,21 +53,27 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
                 const LatLng(65.3, 27), // Get Finland on the screen on startup
             initialZoom: 5,
             onLongPress: (tapPosition, point) {
-              ref.read(mapMarkersProvider).createTempMarker(point, ref);
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return AddNewMarkerBottomSheet(
-                    point: point,
-                    titleController: titleController,
-                    waterController: waterController,
-                    descriptionController: descriptionController,
-                  );
-                },
-              ).whenComplete(() {
-                ref.read(mapMarkersProvider).removeTempMarker(ref);
-              });
+              if (AuthService().user == null) {
+                showSnackBar('Please login to add a marker',
+                    const Icon(Icons.priority_high_rounded, color: Colors.red));
+                return;
+              } else {
+                ref.read(mapMarkersProvider).createTempMarker(point, ref);
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AddNewMarkerBottomSheet(
+                      point: point,
+                      titleController: titleController,
+                      waterController: waterController,
+                      descriptionController: descriptionController,
+                    );
+                  },
+                ).whenComplete(() {
+                  ref.read(mapMarkersProvider).removeTempMarker(ref);
+                });
+              }
             },
           ),
           children: [
