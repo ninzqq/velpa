@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:velpa/models/models.dart';
 import 'package:velpa/screens/mobile/widgets/marker_delete_confirm_dialog.dart';
+import 'package:velpa/services/admin_service.dart';
 import 'package:velpa/services/auth.dart';
 
 class MarkerDetailsBottomSheet extends ConsumerWidget {
   final String id;
+
   const MarkerDetailsBottomSheet({
     required this.id,
     super.key,
@@ -18,8 +20,8 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
     double width = MediaQuery.of(context).size.width;
     final markerProvider = ref.watch(mapMarkersProvider);
     final marker = markerProvider.getMarkerById(id);
-
     var dateFormat = DateFormat('dd.MM.yyyy HH:mm');
+    final adminService = AdminService();
 
     if (marker == null) {
       return const SizedBox.shrink();
@@ -153,26 +155,34 @@ class ButtonRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        if (AuthService().user != null)
-          ElevatedButton(
-            onPressed: () {
-              final nav = Navigator.of(context);
-              nav.push(MaterialPageRoute(
-                  builder: (context) =>
-                      DeleteMarkerConfirmDialog(markerId: id)));
-            },
-            child: const Text('Delete marker'),
-          ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Close'),
-        ),
-      ],
+    final adminService = AdminService();
+
+    return FutureBuilder(
+      future: adminService.checkUserPermissions('delete_marker'),
+      builder: (context, snapshot) {
+        final bool canDelete = snapshot.data ?? false;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            if (canDelete)
+              ElevatedButton(
+                onPressed: () {
+                  final nav = Navigator.of(context);
+                  nav.push(MaterialPageRoute(
+                      builder: (context) =>
+                          DeleteMarkerConfirmDialog(markerId: id)));
+                },
+                child: const Text('Delete marker'),
+              ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

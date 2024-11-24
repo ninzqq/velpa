@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:velpa/models/local_models.dart';
+import 'package:velpa/models/user_model.dart';
+import 'package:velpa/providers/user_provider.dart';
 import 'package:velpa/utils/snackbar.dart';
 
 class AuthService {
@@ -24,24 +26,15 @@ class AuthService {
   }
 
   Future<void> signOut(WidgetRef ref) async {
-    //final googleCurrentUser =
-    //    GoogleSignIn().currentUser ?? await GoogleSignIn().signIn();
-    //if (googleCurrentUser != null) {
-    //  await GoogleSignIn().disconnect().catchError((e, stack) {
-    //    // Handle error
-    //  });
-    //}
     await FirebaseAuth.instance.signOut();
     ref.read(userStateProvider).logout();
+    ref.read(userPermissionsProvider.notifier).clearCache();
   }
 
   Future<void> googleLogin() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: [
-          'email',
-          'profile',
-        ],
+        scopes: ['email', 'profile'],
       );
 
       // First sign out to make sure we don't have any cached credentials
@@ -63,16 +56,28 @@ class AuthService {
           idToken: googleAuth.idToken,
         );
 
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        final userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
 
-        var user = FirebaseAuth.instance.currentUser;
+        // Check if this is a new user
+        final userDoc = await firestore
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get();
 
-        await firestore.collection('users').doc(user!.uid).set({
-          'username': user.email?.split('@')[0],
-          'email': user.email,
-          'isVerified': false,
-          'created_at': FieldValue.serverTimestamp(),
-        });
+        if (!userDoc.exists) {
+          // Create new UserModel for first-time users
+          final user = UserModel(
+            uid: userCredential.user!.uid,
+            email: userCredential.user!.email!,
+            username: googleUser.displayName ??
+                userCredential.user!.email!.split('@')[0],
+            roles: UserRoles(), // Default roles
+            createdAt: DateTime.now(),
+          );
+
+          await firestore.collection('users').doc(user.uid).set(user.toMap());
+        }
       } catch (e) {
         logger.e('Error during Google authentication: $e');
         showSnackBar(
@@ -107,14 +112,17 @@ class AuthService {
         password: password,
       );
 
-      User user = userCredential.user!;
+      // Create UserModel instance
+      final user = UserModel(
+        uid: userCredential.user!.uid,
+        email: email,
+        username: email.split('@')[0],
+        roles: UserRoles(), // Default roles (not admin)
+        createdAt: DateTime.now(),
+      );
+
       // Lisää käyttäjän tiedot Firestoreen
-      await firestore.collection('users').doc(user.uid).set({
-        'username': email.split('@')[0],
-        'email': email,
-        'isVerified': false,
-        'created_at': FieldValue.serverTimestamp(),
-      });
+      await firestore.collection('users').doc(user.uid).set(user.toMap());
       registeredSuccessfully = true;
     } on FirebaseAuthException catch (e) {
       logger.e('Failed with error code: ${e.code}');
@@ -133,7 +141,6 @@ class AuthService {
         email: email,
         password: password,
       );
-      ref.read(userStateProvider).login();
     } on FirebaseAuthException catch (e) {
       logger.e('Failed with error code: ${e.code}');
       logger.e(e.message);

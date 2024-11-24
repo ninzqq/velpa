@@ -8,8 +8,6 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text('Log in', style: theme.textTheme.titleLarge),
@@ -21,61 +19,7 @@ class LoginScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.secondary,
-                    border:
-                        Border.all(color: theme.colorScheme.tertiary, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: emailController,
-                    cursorColor: theme.colorScheme.primaryFixed,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      labelStyle: theme.textTheme.bodyMedium,
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.secondary,
-                    border:
-                        Border.all(color: theme.colorScheme.tertiary, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: passwordController,
-                    cursorColor: theme.colorScheme.primaryFixed,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      labelStyle: theme.textTheme.bodyMedium,
-                      border: InputBorder.none,
-                    ),
-                    obscureText: true,
-                  ),
-                ),
-              ],
-            ),
-            Flexible(
-              child: LoginButton(
-                icon: Icons.account_box,
-                text: 'Continue with email',
-                loginMethod: () => {
-                  AuthService().emailLogin(
-                      ref, emailController.text, passwordController.text)
-                },
-                color: Colors.deepPurple,
-              ),
-            ),
-            Center(child: Text('OR', style: theme.textTheme.titleLarge)),
+            //const EmailLoginForm(),
             Flexible(
               child: LoginButton(
                 icon: Icons.account_circle_rounded,
@@ -107,10 +51,11 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.all(4),
       child: ElevatedButton.icon(
-        label: Text(text),
+        label: Text(text, style: theme.textTheme.titleLarge),
         icon: Icon(
           icon,
           color: Colors.white,
@@ -121,6 +66,74 @@ class LoginButton extends StatelessWidget {
           backgroundColor: color,
         ),
         onPressed: () => loginMethod(),
+      ),
+    );
+  }
+}
+
+class EmailLoginForm extends ConsumerWidget {
+  const EmailLoginForm({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var theme = Theme.of(context);
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.secondary,
+              border: Border.all(color: theme.colorScheme.tertiary, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextField(
+              controller: emailController,
+              cursorColor: theme.colorScheme.primaryFixed,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                labelStyle: theme.textTheme.bodyMedium,
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.secondary,
+              border: Border.all(color: theme.colorScheme.tertiary, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextField(
+              controller: passwordController,
+              cursorColor: theme.colorScheme.primaryFixed,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                labelStyle: theme.textTheme.bodyMedium,
+                border: InputBorder.none,
+              ),
+              obscureText: true,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Flexible(
+            child: LoginButton(
+              icon: Icons.account_box,
+              text: 'Continue with email',
+              loginMethod: () {
+                AuthService().emailRegister(
+                    ref, emailController.text, passwordController.text);
+              },
+              color: Colors.deepPurple,
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }
