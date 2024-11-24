@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
+import 'package:velpa/providers/user_provider.dart';
 import 'package:velpa/screens/mobile/widgets/marker_delete_confirm_dialog.dart';
+import 'package:velpa/screens/mobile/widgets/marker_verify_dialog.dart';
 import 'package:velpa/services/admin_service.dart';
 
 class MarkerDetailsBottomSheet extends ConsumerWidget {
@@ -147,21 +149,37 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
   }
 }
 
-class ButtonRow extends StatelessWidget {
+class ButtonRow extends ConsumerWidget {
   final String id;
   const ButtonRow({required this.id, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final adminService = AdminService();
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-      future: adminService.checkUserPermissions('delete_marker'),
+      future: Future.wait([
+        ref
+            .read(userPermissionsProvider.notifier)
+            .checkPermission('delete_marker'),
+        ref
+            .read(userPermissionsProvider.notifier)
+            .checkPermission('verify_marker'),
+      ]),
       builder: (context, snapshot) {
-        final bool canDelete = snapshot.data ?? false;
+        final bool canDelete = snapshot.data?[0] ?? false;
+        final bool canVerify = snapshot.data?[1] ?? false;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            if (canVerify)
+              IconButton(
+                icon:
+                    const Icon(Icons.check_circle_rounded, color: Colors.green),
+                onPressed: () {
+                  final nav = Navigator.of(context);
+                  nav.push(MaterialPageRoute(
+                      builder: (context) => VerifyMarkerDialog(markerId: id)));
+                },
+              ),
             if (canDelete)
               ElevatedButton(
                 onPressed: () {

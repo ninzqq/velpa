@@ -9,19 +9,7 @@ import 'package:logger/logger.dart';
 class FirestoreService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   var uuid = const Uuid();
-
   final Logger logger = Logger();
-
-  Future<void> addTestStuff() async {
-    var user = AuthService().user!;
-    var id = const Uuid().v4();
-    CollectionReference ref =
-        db.collection('users').doc(user.uid).collection('testinks');
-    await ref.doc(id).set({
-      'PASKAA': 'No VITTU',
-      'JAAHAS': 'JOOHOS',
-    });
-  }
 
   Future<void> addMapMarkerToFirestore(MapMarker marker) async {
     var user = AuthService().user!;
@@ -66,10 +54,6 @@ class FirestoreService {
     }).toList();
   }
 
-  Future<QuerySnapshot> getMapMarkers() async {
-    return await FirebaseFirestore.instance.collection('mapMarkers').get();
-  }
-
   Future<void> deleteMapMarker(String markerId) async {
     DocumentReference marker = FirebaseFirestore.instance
         .collection('unverifiedMarkers')
@@ -77,5 +61,13 @@ class FirestoreService {
     await marker.delete().then((_) {
       logger.d('Deleted unverified marker from firestore: $markerId');
     });
+  }
+
+  Future<void> verifyMapMarker(String markerId) async {
+    DocumentReference marker = FirebaseFirestore.instance
+        .collection('unverifiedMarkers')
+        .doc(markerId);
+
+    await marker.update({'isVerified': true});
   }
 }
