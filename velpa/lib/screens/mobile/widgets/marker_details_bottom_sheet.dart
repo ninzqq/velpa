@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:velpa/models/map_marker_model.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/providers/user_provider.dart';
 import 'package:velpa/screens/mobile/widgets/marker_delete_confirm_dialog.dart';
 import 'package:velpa/screens/mobile/widgets/marker_verify_dialog.dart';
-import 'package:velpa/services/admin_service.dart';
 
 class MarkerDetailsBottomSheet extends ConsumerWidget {
   final String id;
@@ -137,7 +137,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    ButtonRow(id: id),
+                    ButtonRow(marker: marker),
                   ],
                 ),
               );
@@ -150,55 +150,46 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
 }
 
 class ButtonRow extends ConsumerWidget {
-  final String id;
-  const ButtonRow({required this.id, super.key});
+  final MapMarker marker;
+  const ButtonRow({required this.marker, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
-      future: Future.wait([
-        ref
-            .read(userPermissionsProvider.notifier)
-            .checkPermission('delete_marker'),
-        ref
-            .read(userPermissionsProvider.notifier)
-            .checkPermission('verify_marker'),
-      ]),
-      builder: (context, snapshot) {
-        final bool canDelete = snapshot.data?[0] ?? false;
-        final bool canVerify = snapshot.data?[1] ?? false;
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            if (canVerify)
-              IconButton(
-                icon:
-                    const Icon(Icons.check_circle_rounded, color: Colors.green),
-                onPressed: () {
-                  final nav = Navigator.of(context);
-                  nav.push(MaterialPageRoute(
-                      builder: (context) => VerifyMarkerDialog(markerId: id)));
-                },
-              ),
-            if (canDelete)
-              ElevatedButton(
-                onPressed: () {
-                  final nav = Navigator.of(context);
-                  nav.push(MaterialPageRoute(
-                      builder: (context) =>
-                          DeleteMarkerConfirmDialog(markerId: id)));
-                },
-                child: const Text('Delete marker'),
-              ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
+    final user = ref.watch(currentUserProvider);
+    final canDelete =
+        (user?.roles.isAdmin ?? false) || (user?.roles.isModerator ?? false);
+    final canVerify = canDelete; // Same permissions for now
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (canVerify && !marker.isVerified)
+          IconButton(
+            icon: const Icon(Icons.check_circle_rounded, color: Colors.green),
+            onPressed: () {
+              final nav = Navigator.of(context);
+              nav.push(MaterialPageRoute(
+                  builder: (context) =>
+                      VerifyMarkerDialog(markerId: marker.id)));
+            },
+          ),
+        if (canDelete)
+          ElevatedButton(
+            onPressed: () {
+              final nav = Navigator.of(context);
+              nav.push(MaterialPageRoute(
+                  builder: (context) =>
+                      DeleteMarkerConfirmDialog(markerId: marker.id)));
+            },
+            child: const Text('Delete marker'),
+          ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Close'),
+        ),
+      ],
     );
   }
 }

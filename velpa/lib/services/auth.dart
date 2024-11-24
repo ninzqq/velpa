@@ -16,20 +16,16 @@ class AuthService {
 
   var logger = Logger();
 
-  Future<void> anonLogin() async {
-    try {
-      await FirebaseAuth.instance.signInAnonymously();
-    } on FirebaseAuthException catch (e) {
-      logger.e(e.message);
-    }
+  String? getCurrentUserId() {
+    return FirebaseAuth.instance.currentUser?.uid;
   }
 
   Future<void> signOut(WidgetRef ref) async {
     await FirebaseAuth.instance.signOut();
-    ref.read(userPermissionsProvider.notifier).clearCache();
+    ref.read(currentUserProvider.notifier).clearUser();
   }
 
-  Future<void> googleLogin() async {
+  Future<void> googleLogin(WidgetRef ref) async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: ['email', 'profile'],
@@ -75,6 +71,9 @@ class AuthService {
           );
 
           await firestore.collection('users').doc(user.uid).set(user.toMap());
+          await ref
+              .read(currentUserProvider.notifier)
+              .loadUser(userCredential.user!.uid);
         }
       } catch (e) {
         logger.e('Error during Google authentication: $e');
@@ -134,10 +133,14 @@ class AuthService {
   // Kirjaudu sisään
   Future<void> emailLogin(WidgetRef ref, String email, String password) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      await ref
+          .read(currentUserProvider.notifier)
+          .loadUser(userCredential.user!.uid);
     } on FirebaseAuthException catch (e) {
       logger.e('Failed with error code: ${e.code}');
       logger.e(e.message);

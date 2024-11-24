@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserRoles {
   final bool isAdmin;
   final bool isModerator;
@@ -44,7 +46,7 @@ class UserModel {
       'email': email,
       'username': username,
       'roles': roles.toMap(),
-      'created_at': createdAt,
+      'created_at': Timestamp.fromDate(createdAt),
     };
   }
 
@@ -54,7 +56,7 @@ class UserModel {
       email: map['email'],
       username: map['username'],
       roles: UserRoles.fromMap(map['roles']),
-      createdAt: map['created_at'],
+      createdAt: (map['created_at'] as Timestamp).toDate(),
     );
   }
 }

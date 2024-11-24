@@ -35,7 +35,7 @@ class LoginScreen extends ConsumerWidget {
   }
 }
 
-class LoginButton extends StatelessWidget {
+class LoginButton extends ConsumerWidget {
   final Color color;
   final IconData icon;
   final String text;
@@ -50,7 +50,7 @@ class LoginButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.all(4),
@@ -65,7 +65,7 @@ class LoginButton extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           backgroundColor: color,
         ),
-        onPressed: () => loginMethod(),
+        onPressed: () => loginMethod(ref),
       ),
     );
   }
