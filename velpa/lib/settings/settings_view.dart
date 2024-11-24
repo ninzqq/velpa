@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:velpa/models/models.dart';
-import 'package:velpa/services/firestore.dart';
+import 'package:velpa/providers/app_flags_provider.dart';
 import 'settings_controller.dart';
-import 'package:velpa/models/local_models.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -83,22 +81,6 @@ class SettingsView extends ConsumerWidget {
               activeTrackColor: theme.colorScheme.surfaceContainer,
               inactiveThumbColor: theme.colorScheme.primary,
             ),
-          ),
-          ListTile(
-            title: const Text('testinks'),
-            onTap: FirestoreService().addTestStuff,
-          ),
-          ListTile(
-            title: const Text('check temp marker'),
-            onTap: () {
-              ref.read(mapMarkersProvider).checkTempMarker();
-            },
-          ),
-          ListTile(
-            title: const Text('claer temp marker'),
-            onTap: () {
-              ref.read(mapMarkersProvider).removeTempMarker(ref);
-            },
           ),
           const Padding(
             padding: EdgeInsets.all(18),

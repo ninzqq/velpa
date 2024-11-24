@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
-import 'package:velpa/models/local_models.dart';
 import 'package:velpa/models/user_model.dart';
 import 'package:velpa/providers/user_provider.dart';
 import 'package:velpa/utils/snackbar.dart';
@@ -27,7 +26,6 @@ class AuthService {
 
   Future<void> signOut(WidgetRef ref) async {
     await FirebaseAuth.instance.signOut();
-    ref.read(userStateProvider).logout();
     ref.read(userPermissionsProvider.notifier).clearCache();
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:velpa/models/models.dart';
+import 'package:velpa/providers/map_markers_provider.dart';
 
 class MarkerListTile extends ConsumerWidget {
   final int index;

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:velpa/models/models.dart';
+import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/marker_delete_confirm_dialog.dart';
 import 'package:velpa/services/admin_service.dart';
-import 'package:velpa/services/auth.dart';
 
 class MarkerDetailsBottomSheet extends ConsumerWidget {
   final String id;
@@ -21,7 +20,6 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
     final markerProvider = ref.watch(mapMarkersProvider);
     final marker = markerProvider.getMarkerById(id);
     var dateFormat = DateFormat('dd.MM.yyyy HH:mm');
-    final adminService = AdminService();
 
     if (marker == null) {
       return const SizedBox.shrink();

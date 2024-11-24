@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:velpa/models/models.dart';
+import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/input_data_field.dart';
 import 'package:velpa/services/auth.dart';
 import 'package:velpa/services/firestore.dart';

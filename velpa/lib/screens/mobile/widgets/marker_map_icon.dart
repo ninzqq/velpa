@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logger/logger.dart';
-import 'package:velpa/models/local_models.dart';
-import 'package:velpa/models/models.dart';
+import 'package:velpa/providers/custom_map_controller_provider.dart';
+import 'package:velpa/providers/map_markers_provider.dart';
+import 'package:velpa/providers/app_flags_provider.dart';
 import 'package:velpa/screens/mobile/widgets/marker_details_bottom_sheet.dart';
 import 'package:velpa/utils/snackbar.dart';
 

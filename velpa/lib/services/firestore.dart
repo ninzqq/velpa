@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:velpa/models/models.dart';
+import 'package:velpa/models/map_marker_model.dart';
+import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:velpa/services/auth.dart';
 import 'package:logger/logger.dart';
