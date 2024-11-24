@@ -8,35 +8,27 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var user = AuthService().user;
+    var theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(user!.displayName ?? 'Guest'),
+        title: Text('Profile', style: theme.textTheme.titleLarge),
       ),
       body: SafeArea(
         child: Container(
-          color: ThemeData().primaryColorLight,
+          color: theme.colorScheme.surface,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  margin: const EdgeInsets.only(top: 50),
-                  child: const Center(
-                    child: Icon(
-                      Icons.question_mark_rounded,
-                      size: 100,
-                    ),
-                  ),
-                ),
-                Text(user.email ?? '',
-                    style: Theme.of(context).textTheme.titleLarge),
-                const Spacer(),
+                Column(children: [
+                  Text(user?.displayName ?? '',
+                      style: theme.textTheme.titleLarge),
+                  Text(user?.email ?? '', style: theme.textTheme.titleLarge),
+                ]),
                 ElevatedButton(
-                  child: const Text('logout'),
+                  child: const Text('Logout'),
                   onPressed: () async {
                     await AuthService().signOut(ref);
                     if (context.mounted) {
@@ -45,7 +37,6 @@ class ProfileScreen extends ConsumerWidget {
                     }
                   },
                 ),
-                const Spacer(),
               ],
             ),
           ),
