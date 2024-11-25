@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/input_data_field.dart';
 import 'package:velpa/services/auth.dart';
-import 'package:velpa/services/firestore.dart';
 import 'package:velpa/screens/mobile/widgets/additional_data.dart';
 import 'package:velpa/utils/snackbar.dart';
 
@@ -95,7 +94,7 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (titleController.text.isEmpty ||
                                     waterController.text.isEmpty ||
                                     descriptionController.text.isEmpty) {
@@ -112,17 +111,17 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                                   return;
                                 } else {
                                   final nav = Navigator.of(context);
-                                  //ref.read(mapMarkersProvider).addMarker(ref);
-                                  FirestoreService()
-                                      .addMapMarkerToFirestore(ref
-                                          .read(mapMarkersProvider)
-                                          .tempMarker!)
-                                      .then((_) {
-                                    ref
+                                  try {
+                                    await ref
                                         .read(mapMarkersProvider)
-                                        .loadMarkersFromFirestore(ref);
+                                        .addMarker(ref);
                                     nav.pop();
-                                  });
+                                  } catch (e) {
+                                    showSnackBar(
+                                        'Failed to add marker',
+                                        const Icon(Icons.error,
+                                            color: Colors.red));
+                                  }
                                 }
                               },
                               child: const Text('Add Marker'),

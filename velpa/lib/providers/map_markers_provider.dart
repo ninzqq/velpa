@@ -14,10 +14,81 @@ class MapMarkers extends ChangeNotifier {
   List<MapMarker> markers = [];
   List<MapMarker> temporaryMarkers = [];
   MapMarker? tempMarker;
-
   var logger = Logger();
-
   bool _isLoading = false;
+
+  // Local operations
+  void addMarkerLocally(MapMarker marker) {
+    markers.add(marker);
+    notifyListeners();
+  }
+
+  void removeMarkerLocally(String markerId) {
+    markers.removeWhere((m) => m.id == markerId);
+    notifyListeners();
+  }
+
+  void updateMarkerLocally(MapMarker updatedMarker) {
+    final index = markers.indexWhere((m) => m.id == updatedMarker.id);
+    if (index != -1) {
+      markers[index] = updatedMarker;
+      notifyListeners();
+    }
+  }
+
+  // Firestore operations
+  Future<void> addMarker(WidgetRef ref) async {
+    final appFlags = ref.read(appFlagsProvider);
+    MapMarker marker = tempMarker!;
+
+    // Update locally first
+    addMarkerLocally(marker);
+
+    if (appFlags.debug) {
+      logger.d('Moved temp marker ${marker.id} to actual markers.');
+    }
+
+    // Then sync with Firestore
+    try {
+      await FirestoreService().addMapMarkerToFirestore(marker);
+    } catch (e) {
+      // If Firestore update fails, revert local change
+      removeMarkerLocally(marker.id);
+      rethrow;
+    }
+  }
+
+  Future<void> deleteMarker(String markerId, WidgetRef ref) async {
+    // Update locally first
+    removeMarkerLocally(markerId);
+
+    // Then sync with Firestore
+    try {
+      await FirestoreService().deleteMapMarker(markerId);
+    } catch (e) {
+      // If Firestore delete fails, revert local change
+      await loadMarkersFromFirestore(ref);
+      rethrow;
+    }
+  }
+
+  Future<void> verifyMarker(String markerId) async {
+    final marker = getMarkerById(markerId);
+    if (marker == null) return;
+
+    // Update locally first
+    final verifiedMarker = marker.copyWith(isVerified: true);
+    updateMarkerLocally(verifiedMarker);
+
+    // Then sync with Firestore
+    try {
+      await FirestoreService().verifyMapMarker(markerId);
+    } catch (e) {
+      // If Firestore update fails, revert local change
+      updateMarkerLocally(marker);
+      rethrow;
+    }
+  }
 
   Future<void> loadMarkersFromFirestore(WidgetRef ref) async {
     final appFlags = ref.read(appFlagsProvider);
@@ -49,22 +120,6 @@ class MapMarkers extends ChangeNotifier {
     } finally {
       _isLoading = false;
     }
-  }
-
-  void addMarker(WidgetRef ref) {
-    final appFlags = ref.read(appFlagsProvider);
-
-    MapMarker marker = tempMarker!;
-
-    markers.add(marker);
-
-    if (appFlags.debug) {
-      logger.d('Moved temp marker ${marker.id} to actual markers.');
-    }
-
-    checkTempMarker();
-
-    notifyListeners();
   }
 
   void createTempMarker(LatLng point, WidgetRef ref) {
@@ -146,6 +201,12 @@ class MapMarkers extends ChangeNotifier {
         return null;
       }
     }
+  }
+
+  void clearMarkers() {
+    markers.clear();
+    temporaryMarkers.clear();
+    notifyListeners();
   }
 }
 

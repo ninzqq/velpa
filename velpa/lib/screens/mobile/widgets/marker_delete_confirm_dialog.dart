@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
-import 'package:velpa/services/firestore.dart';
 import 'package:velpa/utils/snackbar.dart';
 
 class DeleteMarkerConfirmDialog extends ConsumerWidget {
@@ -20,14 +19,17 @@ class DeleteMarkerConfirmDialog extends ConsumerWidget {
       content: const Text('Are you sure you want to delete this marker?'),
       actions: [
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             final nav = Navigator.of(context);
-            FirestoreService().deleteMapMarker(markerId).then((_) {
-              ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
+            try {
+              await ref.read(mapMarkersProvider).deleteMarker(markerId, ref);
               showSnackBar('Marker deleted',
                   const Icon(Icons.check_circle_rounded, color: Colors.green));
               nav.popUntil((route) => route.isFirst);
-            });
+            } catch (e) {
+              showSnackBar('Failed to delete marker',
+                  const Icon(Icons.error, color: Colors.red));
+            }
           },
           child: const Text(
             'Delete',
