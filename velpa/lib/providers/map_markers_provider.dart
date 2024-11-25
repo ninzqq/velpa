@@ -23,22 +23,12 @@ class MapMarkers extends ChangeNotifier {
     try {
       List<MapMarker> firestoreMarkers =
           await FirestoreService().getUnverifiedMarkers();
+
+      // Add visual marker icons to each marker
       markers = firestoreMarkers
-          .map((marker) => MapMarker(
-                point: marker.point,
-                child: MarkerMapIcon(marker.id),
-                id: marker.id,
-                title: marker.title,
-                water: marker.water,
-                description: marker.description,
-                createdBy: marker.createdBy,
-                createdAt: marker.createdAt,
-                updatedAt: marker.updatedAt,
-                photos: marker.photos,
-                isPublic: marker.isPublic,
-                isVerified: marker.isVerified,
-              ))
+          .map((marker) => marker.copyWith(child: MarkerMapIcon(marker.id)))
           .toList();
+
       notifyListeners();
       if (appFlags.debug) {
         logger.d('${markers.length} markers loaded from firestore');
