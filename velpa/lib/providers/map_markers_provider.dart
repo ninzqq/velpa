@@ -17,8 +17,14 @@ class MapMarkers extends ChangeNotifier {
 
   var logger = Logger();
 
+  bool _isLoading = false;
+
   Future<void> loadMarkersFromFirestore(WidgetRef ref) async {
     final appFlags = ref.read(appFlagsProvider);
+
+    // Prevent multiple simultaneous loads
+    if (_isLoading) return;
+    _isLoading = true;
 
     try {
       List<MapMarker> firestoreMarkers =
@@ -40,6 +46,8 @@ class MapMarkers extends ChangeNotifier {
         const Icon(Icons.priority_high_rounded, color: Colors.red),
         duration: const Duration(seconds: 5),
       );
+    } finally {
+      _isLoading = false;
     }
   }
 
