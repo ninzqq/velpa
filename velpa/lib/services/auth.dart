@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:velpa/models/user_model.dart';
+import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/providers/user_provider.dart';
 import 'package:velpa/utils/snackbar.dart';
 
@@ -23,6 +24,7 @@ class AuthService {
   Future<void> signOut(WidgetRef ref) async {
     await FirebaseAuth.instance.signOut();
     ref.read(currentUserProvider.notifier).clearUser();
+    ref.read(mapMarkersProvider).clearMarkers(); // Clear markers on signout
   }
 
   Future<void> googleLogin(WidgetRef ref) async {
@@ -53,6 +55,9 @@ class AuthService {
         final userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
 
+        // Store ref.read in a variable before async operations
+        final userNotifier = ref.read(currentUserProvider.notifier);
+
         // Check if this is a new user
         final userDoc = await firestore
             .collection('users')
@@ -71,9 +76,9 @@ class AuthService {
           );
 
           await firestore.collection('users').doc(user.uid).set(user.toMap());
-          await ref
-              .read(currentUserProvider.notifier)
-              .loadUser(userCredential.user!.uid);
+          await userNotifier.loadUser(userCredential.user!.uid);
+        } else {
+          await userNotifier.loadUser(userCredential.user!.uid);
         }
       } catch (e) {
         logger.e('Error during Google authentication: $e');
