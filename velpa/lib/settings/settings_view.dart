@@ -84,7 +84,7 @@ class SettingsView extends ConsumerWidget {
           ),
           const Padding(
             padding: EdgeInsets.all(18),
-            child: Text('Version 0.0.0'),
+            child: Text('Version 0.0.1'),
           ),
         ],
       ),
