@@ -11,11 +11,17 @@ class MarkersScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var usermarkers = ref.read(mapMarkersProvider);
+    var theme = Theme.of(context);
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Markers'),
+          backgroundColor: theme.colorScheme.primary,
+          foregroundColor: theme.colorScheme.primaryFixed,
+          title: Text(
+            'Markers',
+            style: theme.textTheme.titleLarge,
+          ),
         ),
         body: ListView.builder(
           itemCount: usermarkers.markers.length,
