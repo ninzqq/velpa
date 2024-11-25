@@ -3,16 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserRoles {
   final bool isAdmin;
   final bool isModerator;
-
+  final bool isVerified;
   UserRoles({
     this.isAdmin = false,
     this.isModerator = false,
+    this.isVerified = false,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'admin': isAdmin,
       'moderator': isModerator,
+      'verified': isVerified,
     };
   }
 
@@ -20,6 +22,7 @@ class UserRoles {
     return UserRoles(
       isAdmin: map['admin'] ?? false,
       isModerator: map['moderator'] ?? false,
+      isVerified: map['verified'] ?? false,
     );
   }
 }
