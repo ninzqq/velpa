@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:velpa/utils/snackbar.dart';
 
 class AdditionalDataContainer extends ConsumerWidget {
   const AdditionalDataContainer({super.key});
@@ -14,63 +15,74 @@ class AdditionalDataContainer extends ConsumerWidget {
     // Define the date format
     var dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss');
 
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(8.0),
+    if (tempMarker == null) {
+      showSnackBar('No temporary marker', const Icon(Icons.error));
+      return const SizedBox.shrink();
+    }
+
+    final List<Map<String, dynamic>> detailItems = [
+      {
+        "leading": "Location: ",
+        "icon": const Icon(
+          Icons.location_on,
+          color: Colors.green,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: tempMarker != null
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        "value":
+            '\nLat: ${tempMarker.point.latitude.toString()}\nLon: ${tempMarker.point.longitude.toString()}',
+      },
+      {
+        "leading": "Created by: ",
+        "icon": const Icon(
+          Icons.person,
+          color: Colors.orange,
+        ),
+        "value": tempMarker.createdBy,
+      },
+      {
+        "leading": "Created on: ",
+        "icon": const Icon(
+          Icons.calendar_today,
+          color: Colors.red,
+        ),
+        "value": dateFormat.format(tempMarker.createdAt),
+      },
+      {
+        "leading": "Last update: ",
+        "icon": const Icon(
+          Icons.update,
+          color: Colors.red,
+        ),
+        "value": dateFormat.format(tempMarker.updatedAt),
+      }
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary,
+      ),
+      child: Column(
+        children: List.generate(
+          detailItems.length,
+          (index) {
+            return ListTile(
+              leading: detailItems[index]['icon'],
+              title: Text.rich(
+                TextSpan(
+                  text: detailItems[index]['leading'],
+                  style: theme.textTheme.labelMedium,
                   children: [
-                    AdditionalDataItem(
-                      title: 'Location: ',
-                      data:
-                          '\n\t\t\t\tLat: ${tempMarker.point.latitude}, \n\t\t\t\tLon: ${tempMarker.point.longitude}',
-                    ),
-                    AdditionalDataItem(
-                      title: 'Created by: ',
-                      data: tempMarker.createdBy,
-                    ),
-                    AdditionalDataItem(
-                      title: 'Created at: ',
-                      data: dateFormat.format(tempMarker.createdAt),
-                    ),
-                    AdditionalDataItem(
-                      title: 'Last updated: ',
-                      data: dateFormat.format(tempMarker.updatedAt),
+                    TextSpan(
+                      text: detailItems[index]['value'],
+                      style: theme.textTheme.bodyMedium,
                     ),
                   ],
-                )
-              : const Text('No voee rähmä, vituiks män'),
+                ),
+              ),
+              dense: true,
+              visualDensity: VisualDensity.compact,
+            );
+          },
         ),
-      ),
-    );
-  }
-}
-
-class AdditionalDataItem extends ConsumerWidget {
-  final String title;
-  final String data;
-  const AdditionalDataItem({
-    super.key,
-    required this.title,
-    required this.data,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Text(
-        title + data,
-        style: theme.textTheme.bodyMedium,
       ),
     );
   }
