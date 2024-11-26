@@ -187,6 +187,16 @@ class MapMarkers extends ChangeNotifier {
     }
   }
 
+  bool checkTempMarkerIsWithinBounds(LatLng point) {
+    if (point.latitude < 59.5 ||
+        point.latitude > 70.2 ||
+        point.longitude < 20.7 ||
+        point.longitude > 31.58) {
+      return false;
+    }
+    return true;
+  }
+
   MapMarker? getMarkerById(String id) {
     try {
       var marker = markers.firstWhere((element) => element.id == id);

@@ -63,6 +63,16 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
                     const Icon(Icons.priority_high_rounded, color: Colors.red));
                 return;
               } else {
+                final isWithinBounds = ref
+                    .read(mapMarkersProvider)
+                    .checkTempMarkerIsWithinBounds(point);
+                if (!isWithinBounds) {
+                  showSnackBar(
+                      'Marker is not within bounds',
+                      const Icon(Icons.priority_high_rounded,
+                          color: Colors.red));
+                  return;
+                }
                 ref.read(mapMarkersProvider).createTempMarker(point, ref);
                 showModalBottomSheet(
                   isScrollControlled: true,
