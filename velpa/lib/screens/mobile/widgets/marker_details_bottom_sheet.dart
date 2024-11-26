@@ -90,12 +90,12 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
             backgroundColor: theme.colorScheme.primary,
             onClosing: () {},
             builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
                           Container(
@@ -137,9 +137,9 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    ButtonRow(marker: marker),
-                  ],
-                ),
+                  ),
+                  ButtonRow(marker: marker),
+                ],
               );
             },
           ),
@@ -155,39 +155,83 @@ class ButtonRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var theme = Theme.of(context);
     final user = ref.watch(currentUserProvider);
+    final width = MediaQuery.of(context).size.width;
     final canDelete =
         (user?.roles.isAdmin ?? false) || (user?.roles.isModerator ?? false);
     final canVerify = canDelete; // Same permissions for now
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         if (canVerify && !marker.isVerified)
-          IconButton(
-            icon: const Icon(Icons.check_circle_rounded, color: Colors.green),
-            onPressed: () {
-              final nav = Navigator.of(context);
-              nav.push(MaterialPageRoute(
-                  builder: (context) =>
-                      VerifyMarkerDialog(markerId: marker.id)));
-            },
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                final nav = Navigator.of(context);
+                nav.push(MaterialPageRoute(
+                    builder: (context) =>
+                        VerifyMarkerDialog(markerId: marker.id)));
+              },
+              child: Container(
+                color: theme.colorScheme.tertiary,
+                child: const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.check_circle_rounded,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         if (canDelete)
-          ElevatedButton(
-            onPressed: () {
-              final nav = Navigator.of(context);
-              nav.push(MaterialPageRoute(
-                  builder: (context) =>
-                      DeleteMarkerConfirmDialog(markerId: marker.id)));
-            },
-            child: const Text('Delete marker'),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                final nav = Navigator.of(context);
+                nav.push(MaterialPageRoute(
+                    builder: (context) =>
+                        DeleteMarkerConfirmDialog(markerId: marker.id)));
+              },
+              child: Container(
+                color: theme.colorScheme.tertiary,
+                child: const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.delete,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Close'),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              color: theme.colorScheme.tertiary,
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.expand_more,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ],
     );
