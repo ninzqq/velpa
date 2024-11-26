@@ -43,58 +43,55 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                 ),
               ),
               builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 0, left: 8.0, right: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          shrinkWrap: true,
-                          children: [
-                            Container(
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                borderRadius: BorderRadius.circular(1.0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Add new marker',
-                                  style: theme.textTheme.labelMedium,
-                                ),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        shrinkWrap: true,
+                        children: [
+                          Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary,
+                              borderRadius: BorderRadius.circular(1.0),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Add new marker',
+                                style: theme.textTheme.labelMedium,
                               ),
                             ),
-                            InputField(
-                              icon: Icons.title,
-                              hintText: 'Title',
-                              textController: titleController,
-                            ),
-                            InputField(
-                              icon: Icons.water,
-                              hintText: 'Name of the lake, bond, river, etc.',
-                              textController: waterController,
-                            ),
-                            InputField(
-                              icon: Icons.description,
-                              hintText: 'Description',
-                              textController: descriptionController,
-                            ),
-                            const AdditionalDataContainer(),
-                          ],
-                        ),
+                          ),
+                          InputField(
+                            icon: Icons.title,
+                            hintText: 'Title',
+                            textController: titleController,
+                          ),
+                          InputField(
+                            icon: Icons.water,
+                            hintText: 'Name of the lake, bond, river, etc.',
+                            textController: waterController,
+                          ),
+                          InputField(
+                            icon: Icons.description,
+                            hintText: 'Description',
+                            textController: descriptionController,
+                          ),
+                          const AdditionalDataContainer(),
+                        ],
                       ),
-                      Container(
-                        height: 50,
-                        margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        color: theme.colorScheme.primary,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () async {
+                    ),
+                    Container(
+                      color: theme.colorScheme.primary,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () async {
                                 if (titleController.text.isEmpty ||
                                     waterController.text.isEmpty ||
                                     descriptionController.text.isEmpty) {
@@ -124,19 +121,51 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                                   }
                                 }
                               },
-                              child: const Text('Add Marker'),
+                              child: Tooltip(
+                                message: 'Lisää merkki',
+                                child: Container(
+                                  color: theme.colorScheme.tertiary,
+                                  child: const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.done,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text('Cancel'),
+                              child: Tooltip(
+                                message: 'Sulje',
+                                child: Container(
+                                  color: theme.colorScheme.tertiary,
+                                  child: const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.expand_more,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
             ),
