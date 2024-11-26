@@ -157,7 +157,6 @@ class ButtonRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
     final user = ref.watch(currentUserProvider);
-    final width = MediaQuery.of(context).size.width;
     final canDelete =
         (user?.roles.isAdmin ?? false) || (user?.roles.isModerator ?? false);
     final canVerify = canDelete; // Same permissions for now
