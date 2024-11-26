@@ -173,15 +173,18 @@ class ButtonRow extends ConsumerWidget {
                     builder: (context) =>
                         VerifyMarkerDialog(markerId: marker.id)));
               },
-              child: Container(
-                color: theme.colorScheme.tertiary,
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.check_circle_rounded,
-                      size: 40,
-                      color: Colors.white,
+              child: Tooltip(
+                message: 'Vahvista',
+                child: Container(
+                  color: theme.colorScheme.tertiary,
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.check_circle_rounded,
+                        size: 40,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -197,15 +200,18 @@ class ButtonRow extends ConsumerWidget {
                     builder: (context) =>
                         DeleteMarkerConfirmDialog(markerId: marker.id)));
               },
-              child: Container(
-                color: theme.colorScheme.tertiary,
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.delete,
-                      size: 40,
-                      color: Colors.white,
+              child: Tooltip(
+                message: 'Poista',
+                child: Container(
+                  color: theme.colorScheme.tertiary,
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.delete,
+                        size: 40,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -217,15 +223,18 @@ class ButtonRow extends ConsumerWidget {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Container(
-              color: theme.colorScheme.tertiary,
-              child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.expand_more,
-                    size: 40,
-                    color: Colors.white,
+            child: Tooltip(
+              message: 'Sulje',
+              child: Container(
+                color: theme.colorScheme.tertiary,
+                child: const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.expand_more,
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
