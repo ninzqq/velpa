@@ -13,6 +13,7 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile', style: theme.textTheme.titleLarge),
+        foregroundColor: theme.colorScheme.primaryFixed,
       ),
       body: SafeArea(
         child: Container(

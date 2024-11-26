@@ -15,7 +15,10 @@ class VerifyMarkerDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
     return AlertDialog(
-      title: const Text('Verify marker?'),
+      content: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text('Verify marker?'),
+      ),
       actions: [
         TextButton(
           onPressed: () async {

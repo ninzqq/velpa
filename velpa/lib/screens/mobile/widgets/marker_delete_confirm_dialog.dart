@@ -15,8 +15,10 @@ class DeleteMarkerConfirmDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
     return AlertDialog(
-      title: const Text('Delete Marker'),
-      content: const Text('Are you sure you want to delete this marker?'),
+      content: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text('Are you sure you want to delete this marker?'),
+      ),
       actions: [
         TextButton(
           onPressed: () async {
