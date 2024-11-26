@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:velpa/services/auth.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -6,6 +7,7 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    final user = AuthService().user;
     final List<Map<String, dynamic>> menuItem = [
       {
         "title": Text("Kartta", style: theme.textTheme.bodyMedium),
@@ -69,6 +71,18 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
             ),
+            if (user == null)
+              Padding(
+                padding: const EdgeInsets.only(left: 14.0),
+                child: ListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text('Kirjaudu'),
+                  onTap: () => {
+                    Navigator.pop(context),
+                    Navigator.pushNamed(context, '/profile'),
+                  },
+                ),
+              ),
             Expanded(
               child: ListView.builder(
                 itemCount: menuItem.length,
