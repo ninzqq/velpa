@@ -34,7 +34,7 @@ class InputField extends ConsumerWidget {
             ),
             1,
           ),
-          tileColor: theme.colorScheme.secondary,
+          tileColor: theme.colorScheme.tertiaryContainer,
           selected: false,
           leading: Icon(icon),
           title: TextField(
