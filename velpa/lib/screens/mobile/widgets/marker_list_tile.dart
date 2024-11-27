@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:velpa/providers/custom_map_controller_provider.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
-import 'package:velpa/screens/mobile/osm_map_screen_mobile.dart';
 import 'package:velpa/screens/mobile/widgets/marker_details_bottom_sheet.dart';
 
 class MarkerListTile extends ConsumerWidget {
@@ -13,7 +12,7 @@ class MarkerListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var markers = ref.read(mapMarkersProvider).markers;
+    var markers = ref.read(mapMarkersProvider).filteredMarkers;
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
       child: Container(

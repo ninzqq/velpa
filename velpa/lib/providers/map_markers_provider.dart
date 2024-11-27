@@ -13,9 +13,12 @@ import 'package:velpa/utils/snackbar.dart';
 class MapMarkers extends ChangeNotifier {
   List<MapMarker> markers = [];
   List<MapMarker> temporaryMarkers = [];
+  List<MapMarker> _filteredMarkers = [];
   MapMarker? tempMarker;
   var logger = Logger();
   bool _isLoading = false;
+
+  List<MapMarker> get filteredMarkers => _filteredMarkers;
 
   // Local operations
   void addMarkerLocally(MapMarker marker) {
@@ -105,8 +108,10 @@ class MapMarkers extends ChangeNotifier {
       markers = firestoreMarkers
           .map((marker) => marker.copyWith(child: MarkerMapIcon(marker.id)))
           .toList();
+      _filteredMarkers = List.from(markers); // Initialize filtered markers
 
       notifyListeners();
+
       if (appFlags.debug) {
         logger.d('${markers.length} markers loaded from firestore');
       }
@@ -211,6 +216,19 @@ class MapMarkers extends ChangeNotifier {
         return null;
       }
     }
+  }
+
+  void filterMarkers(String query) {
+    if (query.isEmpty) {
+      _filteredMarkers = List.from(markers);
+    } else {
+      _filteredMarkers = markers.where((marker) {
+        return marker.title.toLowerCase().contains(query.toLowerCase()) ||
+            marker.water.toLowerCase().contains(query.toLowerCase()) ||
+            marker.description.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    }
+    notifyListeners();
   }
 
   void clearMarkers() {
