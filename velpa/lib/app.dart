@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velpa/profile/userloginstatuscheck.dart';
+import 'package:velpa/screens/mobile/easter_egg_screen.dart';
 import 'package:velpa/screens/mobile/markers_screen.dart';
 import 'package:velpa/screens/mobile/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -159,6 +160,8 @@ class Velpa extends StatelessWidget {
                               return const MarkersScreen();
                             case UserLogInStatusCheck.routeName:
                               return const UserLogInStatusCheck();
+                            case EasterEggScreen.routeName:
+                              return const EasterEggScreen();
                             default:
                               return const HomeScreen();
                           }

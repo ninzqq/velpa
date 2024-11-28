@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:velpa/providers/app_flags_provider.dart';
+import 'package:velpa/screens/mobile/easter_egg_screen.dart';
 import 'settings_controller.dart';
 
 /// Displays the various settings that can be customized by the user.
@@ -17,6 +18,12 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
+    int tapCount = 0;
+
+    int increaseTapCount() {
+      return tapCount++;
+    }
+
     return Scaffold(
       backgroundColor: theme.colorScheme.primary,
       appBar: AppBar(
@@ -93,9 +100,16 @@ class SettingsView extends ConsumerWidget {
             ),
           ),
           Expanded(child: Container()),
-          const Padding(
-            padding: EdgeInsets.all(18),
-            child: Text('Versio 0.0.1'),
+          Padding(
+            padding: const EdgeInsets.all(18),
+            child: GestureDetector(
+              onTap: () {
+                if (increaseTapCount() == 4) {
+                  Navigator.pushNamed(context, EasterEggScreen.routeName);
+                }
+              },
+              child: const Text('Versio 0.0.1'),
+            ),
           ),
         ],
       ),
