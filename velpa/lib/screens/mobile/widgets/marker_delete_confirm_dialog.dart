@@ -17,7 +17,7 @@ class DeleteMarkerConfirmDialog extends ConsumerWidget {
     return AlertDialog(
       content: const Padding(
         padding: EdgeInsets.all(8.0),
-        child: Text('Are you sure you want to delete this marker?'),
+        child: Text('Haluatko varmasti poistaa tämän veneenlaskupaikan?'),
       ),
       actions: [
         TextButton(
@@ -25,16 +25,16 @@ class DeleteMarkerConfirmDialog extends ConsumerWidget {
             final nav = Navigator.of(context);
             try {
               await ref.read(mapMarkersProvider).deleteMarker(markerId, ref);
-              showSnackBar('Marker deleted',
+              showSnackBar('Veneenlaskupaikka poistettu',
                   const Icon(Icons.check_circle_rounded, color: Colors.green));
               nav.popUntil((route) => route.isFirst);
             } catch (e) {
-              showSnackBar('Failed to delete marker',
+              showSnackBar('Poistaminen epäonnistui',
                   const Icon(Icons.error, color: Colors.red));
             }
           },
           child: const Text(
-            'Delete',
+            'Poista',
             style: TextStyle(color: Colors.red),
           ),
         ),
@@ -42,7 +42,7 @@ class DeleteMarkerConfirmDialog extends ConsumerWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel', style: theme.textTheme.bodyMedium),
+          child: Text('Peruuta', style: theme.textTheme.bodyMedium),
         ),
       ],
     );

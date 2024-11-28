@@ -16,13 +16,13 @@ class AdditionalDataContainer extends ConsumerWidget {
     var dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss');
 
     if (tempMarker == null) {
-      showSnackBar('No temporary marker', const Icon(Icons.error));
+      showSnackBar('Ei tilapäistä veneenlaskupaikkaa', const Icon(Icons.error));
       return const SizedBox.shrink();
     }
 
     final List<Map<String, dynamic>> detailItems = [
       {
-        "leading": "Location: ",
+        "leading": "Sijainti: ",
         "icon": const Icon(
           Icons.location_on,
           color: Colors.green,
@@ -31,7 +31,7 @@ class AdditionalDataContainer extends ConsumerWidget {
             '\nLat: ${tempMarker.point.latitude.toString()}\nLon: ${tempMarker.point.longitude.toString()}',
       },
       {
-        "leading": "Created by: ",
+        "leading": "Luonut: ",
         "icon": const Icon(
           Icons.person,
           color: Colors.orange,
@@ -39,7 +39,7 @@ class AdditionalDataContainer extends ConsumerWidget {
         "value": tempMarker.createdBy,
       },
       {
-        "leading": "Created on: ",
+        "leading": "Luotu: ",
         "icon": const Icon(
           Icons.calendar_today,
           color: Colors.red,
@@ -47,7 +47,7 @@ class AdditionalDataContainer extends ConsumerWidget {
         "value": dateFormat.format(tempMarker.createdAt),
       },
       {
-        "leading": "Last update: ",
+        "leading": "Päivitetty: ",
         "icon": const Icon(
           Icons.update,
           color: Colors.red,

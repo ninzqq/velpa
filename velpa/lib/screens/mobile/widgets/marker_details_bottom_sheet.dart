@@ -29,7 +29,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
 
     final List<Map<String, dynamic>> detailItems = [
       {
-        "leading": "Water: ",
+        "leading": "Vesistö: ",
         "icon": const Icon(
           Icons.water,
           color: Colors.blue,
@@ -37,7 +37,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         "value": marker.water,
       },
       {
-        "leading": "Description: ",
+        "leading": "Kuvaus: ",
         "icon": const Icon(
           Icons.description,
           color: Colors.grey,
@@ -45,7 +45,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         "value": marker.description,
       },
       {
-        "leading": "Location: ",
+        "leading": "Sijainti: ",
         "icon": const Icon(
           Icons.location_on,
           color: Colors.green,
@@ -54,7 +54,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
             '\nLat: ${marker.point.latitude.toString()}\nLon: ${marker.point.longitude.toString()}',
       },
       {
-        "leading": "Created by: ",
+        "leading": "Luonut: ",
         "icon": const Icon(
           Icons.person,
           color: Colors.orange,
@@ -62,7 +62,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         "value": marker.createdBy,
       },
       {
-        "leading": "Created on: ",
+        "leading": "Luotu: ",
         "icon": const Icon(
           Icons.calendar_today,
           color: Colors.red,
@@ -70,7 +70,7 @@ class MarkerDetailsBottomSheet extends ConsumerWidget {
         "value": dateFormat.format(marker.createdAt),
       },
       {
-        "leading": "Last update: ",
+        "leading": "Päivitetty: ",
         "icon": const Icon(
           Icons.update,
           color: Colors.red,

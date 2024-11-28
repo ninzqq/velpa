@@ -22,7 +22,7 @@ class MarkersScreen extends ConsumerWidget {
           foregroundColor: theme.colorScheme.primaryFixed,
           scrolledUnderElevation: 0,
           title: Text(
-            'Markers',
+            'Veneenlaskupaikat',
             style: theme.textTheme.titleLarge,
           ),
         ),
@@ -44,7 +44,7 @@ class MarkersScreen extends ConsumerWidget {
                       ref.read(mapMarkersProvider).filterMarkers(text);
                     },
                     decoration: InputDecoration(
-                      hintText: 'Search',
+                      hintText: 'Hae veneenlaskupaikkoja',
                       hintStyle: theme.textTheme.bodyMedium!.copyWith(
                         color: theme.colorScheme.secondaryFixedDim,
                       ),

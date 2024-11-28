@@ -60,24 +60,24 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                             ),
                             child: Center(
                               child: Text(
-                                'Add new marker',
+                                'Lisää veneenlaskupaikka',
                                 style: theme.textTheme.labelMedium,
                               ),
                             ),
                           ),
                           InputField(
                             icon: Icons.title,
-                            hintText: 'Title',
+                            hintText: 'Otsikko',
                             textController: titleController,
                           ),
                           InputField(
                             icon: Icons.water,
-                            hintText: 'Name of the lake, bond, river, etc.',
+                            hintText: 'Vesistö',
                             textController: waterController,
                           ),
                           InputField(
                             icon: Icons.description,
-                            hintText: 'Description',
+                            hintText: 'Kuvaus',
                             textController: descriptionController,
                           ),
                           const AdditionalDataContainer(),
@@ -96,13 +96,13 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                                     waterController.text.isEmpty ||
                                     descriptionController.text.isEmpty) {
                                   showSnackBar(
-                                      'Please fill in all fields',
+                                      'Täytä kaikki kentät',
                                       const Icon(Icons.priority_high_rounded,
                                           color: Colors.red));
                                   return;
                                 } else if (AuthService().user == null) {
                                   showSnackBar(
-                                      'Please login to add a marker',
+                                      'Kirjaudu sisään lisätäksesi veneenlaskupaikka',
                                       const Icon(Icons.priority_high_rounded,
                                           color: Colors.red));
                                   return;
@@ -115,7 +115,7 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                                     nav.pop();
                                   } catch (e) {
                                     showSnackBar(
-                                        'Failed to add marker',
+                                        'Lisääminen epäonnistui',
                                         const Icon(Icons.error,
                                             color: Colors.red));
                                   }

@@ -23,7 +23,7 @@ class SettingsView extends ConsumerWidget {
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.primaryFixed,
         title: Text(
-          'Settings',
+          'Asetukset',
           style: TextStyle(color: theme.colorScheme.primaryFixed),
         ),
       ),
@@ -39,7 +39,7 @@ class SettingsView extends ConsumerWidget {
             // SettingsController is updated, which rebuilds the MaterialApp.
             child: ListTile(
               title: Text(
-                'Theme',
+                'Teema',
                 style: TextStyle(color: theme.colorScheme.primaryFixed),
               ),
               trailing: DropdownButton<ThemeMode>(
@@ -55,21 +55,21 @@ class SettingsView extends ConsumerWidget {
                   DropdownMenuItem(
                     value: ThemeMode.dark,
                     child: Text(
-                      'Dark Theme',
+                      'Tumma teema',
                       style: theme.textTheme.labelMedium,
                     ),
                   ),
                   DropdownMenuItem(
                     value: ThemeMode.system,
                     child: Text(
-                      'System Theme',
+                      'Järjestelmän teema',
                       style: theme.textTheme.labelMedium,
                     ),
                   ),
                   DropdownMenuItem(
                     value: ThemeMode.light,
                     child: Text(
-                      'Light Theme',
+                      'Vaalea teema',
                       style: theme.textTheme.labelMedium,
                     ),
                   ),
@@ -95,7 +95,7 @@ class SettingsView extends ConsumerWidget {
           Expanded(child: Container()),
           const Padding(
             padding: EdgeInsets.all(18),
-            child: Text('Version 0.0.1'),
+            child: Text('Versio 0.0.1'),
           ),
         ],
       ),

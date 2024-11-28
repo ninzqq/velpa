@@ -17,19 +17,19 @@ class VerifyMarkerDialog extends ConsumerWidget {
     return AlertDialog(
       content: const Padding(
         padding: EdgeInsets.all(8.0),
-        child: Text('Verify marker?'),
+        child: Text('Vahvista veneenlaskupaikka?'),
       ),
       actions: [
         TextButton(
           onPressed: () async {
             final nav = Navigator.of(context);
             await ref.read(mapMarkersProvider).verifyMarker(markerId);
-            showSnackBar('Marker verified',
+            showSnackBar('Veneenlaskupaikka vahvistettu',
                 const Icon(Icons.check_circle_rounded, color: Colors.green));
             nav.popUntil((route) => route.isFirst);
           },
           child: const Text(
-            'Verify',
+            'Vahvista',
             style: TextStyle(color: Colors.green),
           ),
         ),
@@ -37,7 +37,7 @@ class VerifyMarkerDialog extends ConsumerWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel', style: theme.textTheme.bodyMedium),
+          child: Text('Peruuta', style: theme.textTheme.bodyMedium),
         ),
       ],
     );

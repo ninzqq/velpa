@@ -12,7 +12,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile', style: theme.textTheme.titleLarge),
+        title: Text('Profiili', style: theme.textTheme.titleLarge),
         foregroundColor: theme.colorScheme.primaryFixed,
       ),
       body: SafeArea(
@@ -29,7 +29,7 @@ class ProfileScreen extends ConsumerWidget {
                   Text(user?.email ?? '', style: theme.textTheme.titleLarge),
                 ]),
                 ElevatedButton(
-                  child: const Text('Logout'),
+                  child: const Text('Kirjaudu ulos'),
                   onPressed: () async {
                     await AuthService().signOut(ref);
                     if (context.mounted) {
@@ -43,20 +43,6 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildSignOutButton(WidgetRef ref) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('Logged in as ${AuthService().user!.email}'),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () => AuthService().signOut(ref),
-          child: const Text('Sign Out'),
-        ),
-      ],
     );
   }
 }
