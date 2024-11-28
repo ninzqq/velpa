@@ -26,7 +26,7 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
     mapController = MapController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
-      ref.read(customMapControllerProvider).setMapController(mapController);
+      ref.watch(customMapControllerProvider).setMapController(mapController);
     });
   }
 
@@ -56,7 +56,10 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
                 flags: InteractiveFlag.pinchZoom |
                     InteractiveFlag.drag |
                     InteractiveFlag.doubleTapDragZoom |
-                    InteractiveFlag.doubleTapZoom),
+                    InteractiveFlag.doubleTapZoom |
+                    InteractiveFlag.pinchMove),
+            maxZoom: 19,
+            minZoom: 5,
             onLongPress: (tapPosition, point) {
               if (AuthService().user == null) {
                 showSnackBar('Please login to add a marker',
