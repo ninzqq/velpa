@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:velpa/models/user_model.dart';
+import 'package:velpa/providers/app_state_provider.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/providers/user_provider.dart';
 import 'package:velpa/utils/snackbar.dart';
@@ -22,9 +23,22 @@ class AuthService {
   }
 
   Future<void> signOut(WidgetRef ref) async {
-    await FirebaseAuth.instance.signOut();
-    ref.read(currentUserProvider.notifier).clearUser();
-    ref.read(mapMarkersProvider).clearMarkers(); // Clear markers on signout
+    try {
+      // 1. Peruuta ensin Firestore-kuuntelijat
+      final userNotifier = ref.read(currentUserProvider.notifier);
+      await userNotifier.clearUser();
+
+      // 2. Kirjaudu ulos Firebasesta
+      await FirebaseAuth.instance.signOut();
+
+      // 3. Nollaa muut providerit
+      ref.invalidate(currentUserProvider);
+      ref.invalidate(appStateProvider);
+      ref.invalidate(mapMarkersProvider);
+    } catch (e) {
+      logger.e('Error during sign out: $e');
+      rethrow;
+    }
   }
 
   Future<void> googleLogin(WidgetRef ref) async {
