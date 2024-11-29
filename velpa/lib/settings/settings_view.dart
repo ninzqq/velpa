@@ -108,7 +108,7 @@ class SettingsView extends ConsumerWidget {
                   Navigator.pushNamed(context, EasterEggScreen.routeName);
                 }
               },
-              child: const Text('Versio 0.0.1'),
+              child: const Text('Versio 0.1.0'),
             ),
           ),
         ],
