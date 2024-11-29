@@ -6,27 +6,28 @@ import 'package:velpa/services/auth.dart';
 import 'package:velpa/screens/mobile/widgets/additional_data.dart';
 import 'package:velpa/utils/snackbar.dart';
 
-class AddNewMarkerBottomSheet extends ConsumerWidget {
-  final TextEditingController titleController;
-  final TextEditingController waterController;
-  final TextEditingController descriptionController;
+class EditMarkerBottomSheet extends ConsumerWidget {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController waterController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
-  const AddNewMarkerBottomSheet(
-      {super.key,
-      required this.titleController,
-      required this.waterController,
-      required this.descriptionController});
+  EditMarkerBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
+    var tempMarker = ref.read(mapMarkersProvider).tempMarker;
+
+    if (tempMarker == null) {
+      return const SizedBox.shrink();
+    }
 
     return SingleChildScrollView(
       child: Container(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: MediaQuery.of(context).size.height * 0.55,
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: BottomSheet(
@@ -57,7 +58,7 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                             ),
                             child: Center(
                               child: Text(
-                                'Lisää veneenlaskupaikka',
+                                'Muokkaa veneenlaskupaikkaa',
                                 style: theme.textTheme.labelMedium,
                               ),
                             ),
@@ -65,19 +66,25 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                           InputField(
                             icon: Icons.title,
                             hintText: 'Otsikko',
-                            textController: titleController,
+                            textController: titleController
+                              ..text = tempMarker.title,
+                            marker: tempMarker,
                           ),
                           InputField(
                             icon: Icons.water,
                             hintText: 'Vesistö',
-                            textController: waterController,
+                            textController: waterController
+                              ..text = tempMarker.water,
+                            marker: tempMarker,
                           ),
                           InputField(
                             icon: Icons.description,
                             hintText: 'Kuvaus',
-                            textController: descriptionController,
+                            textController: descriptionController
+                              ..text = tempMarker.description,
+                            marker: tempMarker,
                           ),
-                          const AdditionalDataContainer(),
+                          AdditionalDataContainer(marker: tempMarker),
                         ],
                       ),
                     ),
@@ -99,34 +106,36 @@ class AddNewMarkerBottomSheet extends ConsumerWidget {
                                   return;
                                 } else if (AuthService().user == null) {
                                   showSnackBar(
-                                      'Kirjaudu sisään lisätäksesi veneenlaskupaikka',
+                                      'Kirjaudu sisään muokataksesi veneenlaskupaikkaa',
                                       const Icon(Icons.priority_high_rounded,
                                           color: Colors.red));
                                   return;
                                 } else {
+                                  var updatedTempMarker =
+                                      ref.read(mapMarkersProvider).tempMarker;
                                   final nav = Navigator.of(context);
                                   try {
                                     await ref
                                         .read(mapMarkersProvider)
-                                        .addMarker(ref);
+                                        .updateMarker(updatedTempMarker!, ref);
                                     nav.pop();
                                   } catch (e) {
                                     showSnackBar(
-                                        'Lisääminen epäonnistui',
+                                        'Muokkaus epäonnistui',
                                         const Icon(Icons.error,
                                             color: Colors.red));
                                   }
                                 }
                               },
                               child: Tooltip(
-                                message: 'Lisää merkki',
+                                message: 'Tallenna',
                                 child: Container(
                                   color: theme.colorScheme.tertiary,
                                   child: const Center(
                                     child: Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Icon(
-                                        Icons.done,
+                                        Icons.save,
                                         size: 40,
                                         color: Colors.white,
                                       ),

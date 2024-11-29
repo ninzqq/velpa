@@ -63,6 +63,18 @@ class FirestoreService {
     });
   }
 
+  Future<void> updateMapMarker(MapMarker updatedMarker) async {
+    DocumentReference ref = FirebaseFirestore.instance
+        .collection('unverifiedMarkers')
+        .doc(updatedMarker.id);
+    await ref.update({
+      'title': updatedMarker.title,
+      'water': updatedMarker.water,
+      'description': updatedMarker.description,
+      'updatedAt': updatedMarker.updatedAt,
+    });
+  }
+
   Future<void> verifyMapMarker(String markerId) async {
     DocumentReference marker = FirebaseFirestore.instance
         .collection('unverifiedMarkers')

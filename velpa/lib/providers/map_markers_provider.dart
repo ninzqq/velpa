@@ -75,6 +75,28 @@ class MapMarkers extends ChangeNotifier {
     }
   }
 
+  Future<void> updateMarker(MapMarker marker, WidgetRef ref) async {
+    final oldMarker = getMarkerById(marker.id);
+    if (oldMarker == null) return;
+
+    // Update locally first
+    final updatedMarker = oldMarker.copyWith(
+        title: marker.title,
+        water: marker.water,
+        description: marker.description,
+        updatedAt: DateTime.now());
+    updateMarkerLocally(updatedMarker);
+
+    // Then sync with Firestore
+    try {
+      await FirestoreService().updateMapMarker(updatedMarker);
+    } catch (e) {
+      // If Firestore update fails, revert local change
+      updateMarkerLocally(oldMarker);
+      rethrow;
+    }
+  }
+
   Future<void> verifyMarker(String markerId) async {
     final marker = getMarkerById(markerId);
     if (marker == null) return;

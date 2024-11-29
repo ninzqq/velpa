@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:velpa/models/map_marker_model.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:velpa/utils/snackbar.dart';
 
 class AdditionalDataContainer extends ConsumerWidget {
-  const AdditionalDataContainer({super.key});
+  final MapMarker? marker;
+  const AdditionalDataContainer({super.key, this.marker});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var theme = Theme.of(context);
-    var tempMarker = ref.read(mapMarkersProvider).tempMarker;
+    MapMarker? tempMarker;
+    if (marker == null) {
+      tempMarker = ref.read(mapMarkersProvider).tempMarker;
+    } else {
+      tempMarker = marker;
+    }
 
     // Define the date format
     var dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss');

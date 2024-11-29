@@ -82,7 +82,6 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
                   context: context,
                   builder: (BuildContext context) {
                     return AddNewMarkerBottomSheet(
-                      point: point,
                       titleController: titleController,
                       waterController: waterController,
                       descriptionController: descriptionController,

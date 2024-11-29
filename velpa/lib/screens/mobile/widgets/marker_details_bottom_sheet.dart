@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:velpa/models/map_marker_model.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/providers/user_provider.dart';
+import 'package:velpa/screens/mobile/widgets/edit_marker_bottom_sheet.dart';
 import 'package:velpa/screens/mobile/widgets/marker_delete_confirm_dialog.dart';
 import 'package:velpa/screens/mobile/widgets/marker_verify_dialog.dart';
 
@@ -160,6 +161,9 @@ class ButtonRow extends ConsumerWidget {
     final canDelete =
         (user?.roles.isAdmin ?? false) || (user?.roles.isModerator ?? false);
     final canVerify = canDelete; // Same permissions for now
+    final canEdit = (user?.roles.isAdmin ?? false) ||
+        (user?.roles.isModerator ?? false) ||
+        (marker.createdBy == user?.email);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -182,6 +186,39 @@ class ButtonRow extends ConsumerWidget {
                       padding: EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.check_circle_rounded,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (canEdit)
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                ref.read(mapMarkersProvider).updateTempMarker(marker, ref);
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return EditMarkerBottomSheet();
+                  },
+                ).whenComplete(() {
+                  ref.read(mapMarkersProvider).removeTempMarker(ref);
+                });
+              },
+              child: Tooltip(
+                message: 'Muokkaa',
+                child: Container(
+                  color: theme.colorScheme.tertiary,
+                  child: const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.edit,
                         size: 40,
                         color: Colors.white,
                       ),
