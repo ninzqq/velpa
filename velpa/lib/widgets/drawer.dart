@@ -75,8 +75,8 @@ class MainDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 14.0),
                 child: ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Kirjaudu'),
+                  leading: const Icon(Icons.person, color: Colors.purple),
+                  title: Text('Kirjaudu', style: theme.textTheme.labelLarge),
                   onTap: () => {
                     Navigator.pop(context),
                     Navigator.pushNamed(context, '/profile'),

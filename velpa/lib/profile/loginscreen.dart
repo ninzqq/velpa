@@ -10,7 +10,8 @@ class LoginScreen extends ConsumerWidget {
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Log in', style: theme.textTheme.titleLarge),
+        title: Text('Kirjaudu sisään', style: theme.textTheme.titleLarge),
+        foregroundColor: theme.colorScheme.primaryFixed,
       ),
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -23,7 +24,7 @@ class LoginScreen extends ConsumerWidget {
             Flexible(
               child: LoginButton(
                 icon: Icons.account_circle_rounded,
-                text: 'Sign in with Google',
+                text: 'Kirjaudu Googlella',
                 loginMethod: AuthService().googleLogin,
                 color: Colors.blue,
               ),
