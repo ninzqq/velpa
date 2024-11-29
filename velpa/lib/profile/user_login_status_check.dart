@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:velpa/profile/loginscreen.dart';
+import 'package:velpa/profile/login_screen.dart';
 import 'package:velpa/profile/profile_screen.dart';
 import 'package:velpa/services/auth.dart';
-import 'package:velpa/utils/loadingscreen.dart';
+import 'package:velpa/utils/loading_screen.dart';
 
 class UserLogInStatusCheck extends StatelessWidget {
   const UserLogInStatusCheck({super.key});

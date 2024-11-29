@@ -8,8 +8,8 @@ import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/services/auth.dart';
 import 'package:velpa/utils/snackbar.dart';
-import 'package:velpa/widgets/drawer.dart';
-import 'package:velpa/widgets/map_screen_drawer_button.dart';
+import 'package:velpa/utils/drawer.dart';
+import 'package:velpa/utils/map_screen_drawer_button.dart';
 
 class OSMMapScreenMobile extends ConsumerStatefulWidget {
   const OSMMapScreenMobile({super.key});
