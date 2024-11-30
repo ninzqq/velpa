@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:velpa/services/auth.dart';
+import 'package:velpa/utils/intro_dialog.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -51,6 +52,19 @@ class MainDrawer extends StatelessWidget {
         "function": () => {
               Navigator.pop(context),
               Navigator.pushNamed(context, "/settings"),
+            },
+        "selected": false,
+      },
+      {
+        "title": Text("Ohjeet", style: theme.textTheme.bodyMedium),
+        "icon": const Icon(Icons.help, color: Colors.yellow),
+        "function": () => {
+              Navigator.pop(context),
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const IntroDialog();
+                  }),
             },
         "selected": false,
       }

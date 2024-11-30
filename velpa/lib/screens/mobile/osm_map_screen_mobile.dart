@@ -7,9 +7,11 @@ import 'package:velpa/providers/custom_map_controller_provider.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/services/auth.dart';
+import 'package:velpa/utils/intro_dialog.dart';
 import 'package:velpa/utils/snackbar.dart';
 import 'package:velpa/utils/drawer.dart';
 import 'package:velpa/utils/map_screen_drawer_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OSMMapScreenMobile extends ConsumerStatefulWidget {
   const OSMMapScreenMobile({super.key});
@@ -27,6 +29,7 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
       ref.watch(customMapControllerProvider).setMapController(mapController);
+      showIntroDialog(context);
     });
   }
 
@@ -113,5 +116,21 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
         ),
       ),
     );
+  }
+
+  void showIntroDialog(context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool? intro = prefs.getBool('intro');
+    if (intro == true) {
+      return;
+    }
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const IntroDialog();
+        });
+
+    await prefs.setBool('intro', true);
   }
 }
