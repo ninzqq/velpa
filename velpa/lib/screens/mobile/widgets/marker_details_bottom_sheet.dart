@@ -172,10 +172,11 @@ class ButtonRow extends ConsumerWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                final nav = Navigator.of(context);
-                nav.push(MaterialPageRoute(
-                    builder: (context) =>
-                        VerifyMarkerDialog(markerId: marker.id)));
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return VerifyMarkerDialog(markerId: marker.id);
+                    });
               },
               child: Tooltip(
                 message: 'Vahvista',
@@ -232,10 +233,11 @@ class ButtonRow extends ConsumerWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                final nav = Navigator.of(context);
-                nav.push(MaterialPageRoute(
-                    builder: (context) =>
-                        DeleteMarkerConfirmDialog(markerId: marker.id)));
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DeleteMarkerConfirmDialog(markerId: marker.id);
+                    });
               },
               child: Tooltip(
                 message: 'Poista',
