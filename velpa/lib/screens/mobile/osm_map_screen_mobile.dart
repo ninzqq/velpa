@@ -26,18 +26,21 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
   void initState() {
     super.initState();
     mapController = MapController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
-      ref.watch(customMapControllerProvider).setMapController(mapController);
-      showIntroDialog(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(customMapControllerProvider).setMapController(mapController);
+      await ref.read(mapMarkersProvider).loadMarkersFromFirestore(ref);
+      if (mounted) {
+        showIntroDialog(context);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Marker> markers = ref.watch(mapMarkersProvider).markers;
+    List<Marker> markers =
+        ref.watch(mapMarkersProvider.select((value) => value.markers));
     List<Marker> temporaryMarkers =
-        ref.watch(mapMarkersProvider).temporaryMarkers;
+        ref.watch(mapMarkersProvider.select((value) => value.temporaryMarkers));
     final TextEditingController titleController = TextEditingController();
     final TextEditingController waterController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
