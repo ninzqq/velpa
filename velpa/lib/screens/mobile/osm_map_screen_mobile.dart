@@ -12,6 +12,7 @@ import 'package:velpa/utils/snackbar.dart';
 import 'package:velpa/utils/drawer.dart';
 import 'package:velpa/utils/map_screen_drawer_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OSMMapScreenMobile extends ConsumerStatefulWidget {
   const OSMMapScreenMobile({super.key});
@@ -115,6 +116,27 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
               ...markers,
               ...temporaryMarkers,
             ]),
+            RichAttributionWidget(
+              animationConfig: const ScaleRAWA(), // Or `FadeRAWA` as is default
+              attributions: [
+                TextSourceAttribution(
+                  'OpenStreetMap contributors',
+                  onTap: () async {
+                    try {
+                      final Uri url =
+                          Uri.parse('https://openstreetmap.org/copyright');
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      if (context.mounted) {
+                        showSnackBar('Could not open URL',
+                            const Icon(Icons.error, color: Colors.red));
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
