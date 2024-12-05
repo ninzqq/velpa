@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
-import 'package:velpa/screens/mobile/osm_map_screen_mobile.dart';
+import 'package:velpa/screens/mobile/map_screen_mobile.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:velpa/screens/web/osm_map_screen_web.dart';
 

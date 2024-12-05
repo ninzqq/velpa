@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:velpa/models/map_marker_model.dart';
 import 'package:velpa/providers/custom_map_controller_provider.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
-import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
 import 'package:velpa/screens/mobile/widgets/osm_map.dart';
-import 'package:velpa/services/auth.dart';
 import 'package:velpa/utils/intro_dialog.dart';
-import 'package:velpa/utils/snackbar.dart';
 import 'package:velpa/utils/drawer.dart';
 import 'package:velpa/utils/map_screen_drawer_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:proj4dart/proj4dart.dart' as proj4;
 
 class OSMMapScreenMobile extends ConsumerStatefulWidget {
