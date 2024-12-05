@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:velpa/models/map_marker_model.dart';
 import 'package:velpa/providers/custom_map_controller_provider.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
@@ -13,6 +14,7 @@ import 'package:velpa/utils/drawer.dart';
 import 'package:velpa/utils/map_screen_drawer_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:proj4dart/proj4dart.dart' as proj4;
 
 class OSMMapScreenMobile extends ConsumerStatefulWidget {
   const OSMMapScreenMobile({super.key});
@@ -38,9 +40,9 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
 
   @override
   Widget build(BuildContext context) {
-    List<Marker> markers =
+    List<MapMarker> markers =
         ref.watch(mapMarkersProvider.select((value) => value.markers));
-    List<Marker> temporaryMarkers =
+    List<MapMarker> temporaryMarkers =
         ref.watch(mapMarkersProvider.select((value) => value.temporaryMarkers));
     final TextEditingController titleController = TextEditingController();
     final TextEditingController waterController = TextEditingController();
@@ -65,8 +67,8 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
                     InteractiveFlag.doubleTapDragZoom |
                     InteractiveFlag.doubleTapZoom |
                     InteractiveFlag.pinchMove),
-            maxZoom: 19,
-            minZoom: 5,
+            maxZoom: 15,
+            minZoom: 2,
             onLongPress: (tapPosition, point) {
               if (AuthService().user == null) {
                 showSnackBar('Please login to add a marker',
@@ -104,6 +106,9 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.example.velpa',
+              maxZoom: 15,
+              minZoom: 2,
+              tileSize: 256,
             ),
             CurrentLocationLayer(
               alignPositionOnUpdate: AlignOnUpdate.never,
@@ -157,5 +162,16 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
         });
 
     await prefs.setBool('intro', true);
+  }
+
+  LatLng convertToEtrsTM35FIN(LatLng latLng) {
+    final wgs84 = proj4.Projection.get('EPSG:4326'); // WGS84
+    final etrsTM35FIN = proj4.Projection.get('EPSG:3067') ??
+        proj4.Projection.add('EPSG:3067',
+            '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'); // ETRS-TM35FIN
+
+    final point = proj4.Point(x: latLng.longitude, y: latLng.latitude);
+    final transformedPoint = etrsTM35FIN.transform(wgs84!, point);
+    return LatLng(transformedPoint.y, transformedPoint.x);
   }
 }
