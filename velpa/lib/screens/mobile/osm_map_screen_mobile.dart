@@ -7,6 +7,7 @@ import 'package:velpa/models/map_marker_model.dart';
 import 'package:velpa/providers/custom_map_controller_provider.dart';
 import 'package:velpa/providers/map_markers_provider.dart';
 import 'package:velpa/screens/mobile/widgets/add_new_marker_bottom_sheet.dart';
+import 'package:velpa/screens/mobile/widgets/osm_map.dart';
 import 'package:velpa/services/auth.dart';
 import 'package:velpa/utils/intro_dialog.dart';
 import 'package:velpa/utils/snackbar.dart';
@@ -53,95 +54,13 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
         floatingActionButton: const MapScreenDrawerButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         resizeToAvoidBottomInset: true,
-        body: FlutterMap(
+        body: OsmMap(
+          markers: markers,
+          temporaryMarkers: temporaryMarkers,
           mapController: mapController,
-          options: MapOptions(
-            keepAlive: true,
-            initialCenter:
-                const LatLng(65.3, 26), // Get Finland on the screen on startup
-            initialZoom: 5.25,
-            interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.pinchZoom |
-                    InteractiveFlag.drag |
-                    InteractiveFlag.doubleTapDragZoom |
-                    InteractiveFlag.doubleTapZoom |
-                    InteractiveFlag.pinchMove),
-            maxZoom: 15,
-            minZoom: 2,
-            onLongPress: (tapPosition, point) {
-              if (AuthService().user == null) {
-                showSnackBar('Please login to add a marker',
-                    const Icon(Icons.priority_high_rounded, color: Colors.red));
-                return;
-              } else {
-                final isWithinBounds = ref
-                    .read(mapMarkersProvider)
-                    .checkTempMarkerIsWithinBounds(point);
-                if (!isWithinBounds) {
-                  showSnackBar(
-                      'Marker is not within bounds',
-                      const Icon(Icons.priority_high_rounded,
-                          color: Colors.red));
-                  return;
-                }
-                ref.read(mapMarkersProvider).createTempMarker(point, ref);
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AddNewMarkerBottomSheet(
-                      titleController: titleController,
-                      waterController: waterController,
-                      descriptionController: descriptionController,
-                    );
-                  },
-                ).whenComplete(() {
-                  ref.read(mapMarkersProvider).removeTempMarker(ref);
-                });
-              }
-            },
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.velpa',
-              maxZoom: 15,
-              minZoom: 2,
-              tileSize: 256,
-            ),
-            CurrentLocationLayer(
-              alignPositionOnUpdate: AlignOnUpdate.never,
-              alignDirectionOnUpdate: AlignOnUpdate.never,
-              style: const LocationMarkerStyle(
-                markerSize: Size(12, 12),
-              ),
-            ),
-            MarkerLayer(markers: [
-              ...markers,
-              ...temporaryMarkers,
-            ]),
-            RichAttributionWidget(
-              animationConfig: const ScaleRAWA(), // Or `FadeRAWA` as is default
-              attributions: [
-                TextSourceAttribution(
-                  'OpenStreetMap contributors',
-                  onTap: () async {
-                    try {
-                      final Uri url =
-                          Uri.parse('https://openstreetmap.org/copyright');
-                      await launchUrl(url,
-                          mode: LaunchMode.externalApplication);
-                    } catch (e) {
-                      if (context.mounted) {
-                        showSnackBar('Could not open URL',
-                            const Icon(Icons.error, color: Colors.red));
-                      }
-                    }
-                  },
-                ),
-              ],
-            ),
-          ],
+          titleController: titleController,
+          waterController: waterController,
+          descriptionController: descriptionController,
         ),
       ),
     );
