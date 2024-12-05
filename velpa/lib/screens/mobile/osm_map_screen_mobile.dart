@@ -40,10 +40,9 @@ class OSMMapScreenMobileState extends ConsumerState<OSMMapScreenMobile> {
 
   @override
   Widget build(BuildContext context) {
-    List<MapMarker> markers =
-        ref.watch(mapMarkersProvider.select((value) => value.markers));
+    List<Marker> markers = ref.watch(mapMarkersProvider).markers;
     List<MapMarker> temporaryMarkers =
-        ref.watch(mapMarkersProvider.select((value) => value.temporaryMarkers));
+        ref.watch(mapMarkersProvider).temporaryMarkers;
     final TextEditingController titleController = TextEditingController();
     final TextEditingController waterController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
